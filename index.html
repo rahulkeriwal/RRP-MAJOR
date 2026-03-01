@@ -7,8 +7,8 @@
 <style>
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
-background: linear-gradient(135deg,#1e3c72,#2a5298);
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
 color:white;
 }
 
@@ -38,24 +38,22 @@ text-align:center;
 font-weight:bold;
 }
 
-/* Home Section */
+/* Home */
 .home-section{
 padding:20px;
 text-align:center;
 }
 
-/* 4 ICON ROW */
+/* 4 ICONS ROW */
 .top-section{
 display:flex;
-justify-content:center;
-gap:15px;
+justify-content:space-between;
+gap:10px;
 margin-top:20px;
-flex-wrap:nowrap;
 }
 
 .box{
 flex:1;
-max-width:90px;
 height:95px;
 background:white;
 border-radius:18px;
@@ -80,9 +78,44 @@ width:35px;
 margin-bottom:6px;
 }
 
-/* Profile Card */
+/* LIVE WITHDRAW */
+.live-box{
+margin-top:25px;
+background:rgba(255,255,255,0.1);
+padding:15px;
+border-radius:15px;
+}
+
+.withdraw-container{
+height:120px;
+overflow:hidden;
+position:relative;
+}
+
+#withdrawList{
+position:absolute;
+width:100%;
+animation:scrollUp 12s linear infinite;
+}
+
+.withdraw-item{
+background:white;
+color:black;
+margin:6px 0;
+padding:6px;
+border-radius:8px;
+font-size:14px;
+font-weight:bold;
+}
+
+@keyframes scrollUp{
+0%{top:100%;}
+100%{top:-100%;}
+}
+
+/* Profile */
 .profile{
-margin-top:30px;
+margin-top:25px;
 background:rgba(255,255,255,0.1);
 padding:20px;
 border-radius:20px;
@@ -158,7 +191,7 @@ font-weight:bold;
 Telegram
 </a>
 
-<a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">
+<a href="https://whatsapp.com" class="box" target="_blank">
 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
 WhatsApp
 </a>
@@ -168,12 +201,21 @@ WhatsApp
 Chat Us
 </a>
 
-<a href="https://youtube.com/@animationn-story" class="box" target="_blank">
+<a href="https://youtube.com" class="box" target="_blank">
 <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
 YouTube
 </a>
 </div>
 
+<!-- LIVE WITHDRAW -->
+<div class="live-box">
+<h3>🔥 Live Withdraw</h3>
+<div class="withdraw-container">
+<div id="withdrawList"></div>
+</div>
+</div>
+
+<!-- PROFILE -->
 <div class="profile" id="profileSection">
 <h2 id="username">Guest User</h2>
 <h1>₹ <span id="wallet">0</span></h1>
@@ -209,13 +251,12 @@ YouTube
 <button>Withdraw</button>
 </div>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -226,8 +267,8 @@ const firebaseConfig = {
   measurementId: "G-J6X9KHPXJQ"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth();
+const db=firebase.firestore();
 
 /* Page Switch */
 function showLogin(){
@@ -235,13 +276,11 @@ homePage.style.display="none";
 registerPage.style.display="none";
 loginPage.style.display="block";
 }
-
 function showRegister(){
 homePage.style.display="none";
 loginPage.style.display="none";
 registerPage.style.display="block";
 }
-
 function goHome(){
 homePage.style.display="block";
 loginPage.style.display="none";
@@ -250,64 +289,44 @@ registerPage.style.display="none";
 
 /* Register */
 function registerUser(){
-let name=name.value;
-let email=email.value;
-let password=password.value;
-let confirm=confirmPassword.value;
-
-if(password!==confirm){
+if(password.value!==confirmPassword.value){
 alert("Passwords do not match");
 return;
 }
-
-auth.createUserWithEmailAndPassword(email,password)
+auth.createUserWithEmailAndPassword(email.value,password.value)
 .then((userCredential)=>{
-let user=userCredential.user;
-
-db.collection("users").doc(user.uid).set({
-name:name,
-email:email,
+db.collection("users").doc(userCredential.user.uid).set({
+name:name.value,
+email:email.value,
 wallet:0,
 createdAt:new Date()
 });
-
 alert("Registration Successful!");
 goHome();
 })
-.catch((error)=>{
-alert(error.message);
-});
+.catch(error=>alert(error.message));
 }
 
 /* Login */
 function loginUser(){
 auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value)
-.then(()=>{
-alert("Login Successful!");
-goHome();
-})
-.catch((error)=>{
-alert(error.message);
-});
+.then(()=>{alert("Login Successful!");goHome();})
+.catch(error=>alert(error.message));
 }
 
 /* Auth State */
 auth.onAuthStateChanged((user)=>{
 if(user){
-
 profileSection.style.display="block";
 bottomNav.style.display="flex";
-
 db.collection("users").doc(user.uid)
-.onSnapshot((doc)=>{
+.onSnapshot(doc=>{
 if(doc.exists){
 username.innerText=doc.data().name;
 wallet.innerText=doc.data().wallet;
 }
 });
-
 }else{
-
 profileSection.style.display="none";
 bottomNav.style.display="none";
 username.innerText="Guest User";
@@ -315,6 +334,23 @@ wallet.innerText="0";
 }
 });
 
+/* RANDOM LIVE WITHDRAW */
+const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun","Karan","Sneha","Deepak","Priya","Ankit","Riya","Manish","Komal"];
+
+function generateWithdraw(){
+let container=document.getElementById("withdrawList");
+container.innerHTML="";
+for(let i=0;i<12;i++){
+let randomName=names[Math.floor(Math.random()*names.length)];
+let randomAmount=Math.floor(Math.random()*4400)+100;
+let div=document.createElement("div");
+div.className="withdraw-item";
+div.innerText=randomName+" Withdraw ₹"+randomAmount;
+container.appendChild(div);
+}
+}
+generateWithdraw();
+setInterval(generateWithdraw,15000);
 </script>
 
 </body>
