@@ -87,15 +87,14 @@ border-radius:15px;
 }
 
 .withdraw-container{
-height:120px;
+height:130px;
 overflow:hidden;
 position:relative;
 }
 
 #withdrawList{
-position:absolute;
-width:100%;
-animation:scrollUp 12s linear infinite;
+display:flex;
+flex-direction:column;
 }
 
 .withdraw-item{
@@ -108,11 +107,6 @@ font-size:14px;
 font-weight:bold;
 }
 
-@keyframes scrollUp{
-0%{top:100%;}
-100%{top:-100%;}
-}
-
 /* Profile */
 .profile{
 margin-top:25px;
@@ -122,7 +116,7 @@ border-radius:20px;
 display:none;
 }
 
-/* Auth Pages */
+/* Auth */
 .auth-page{
 display:none;
 padding:30px 20px;
@@ -182,7 +176,6 @@ font-weight:bold;
 🔥 Join Telegram & Earn 130₹ Instantly 🔥
 </div>
 
-<!-- HOME PAGE -->
 <div class="home-section" id="homePage">
 
 <div class="top-section">
@@ -223,7 +216,7 @@ YouTube
 
 </div>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 <div class="auth-page" id="loginPage">
 <h2>Login</h2>
 <input type="email" id="loginEmail" placeholder="Email">
@@ -232,14 +225,13 @@ YouTube
 <button onclick="goHome()">Back</button>
 </div>
 
-<!-- REGISTER PAGE -->
+<!-- REGISTER -->
 <div class="auth-page" id="registerPage">
 <h2>Register</h2>
 <input type="text" id="name" placeholder="Full Name">
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="password" placeholder="Password">
 <input type="password" id="confirmPassword" placeholder="Confirm Password">
-<input type="text" id="inviteCode" placeholder="Invitation Code">
 <button onclick="registerUser()">Register</button>
 <button onclick="goHome()">Back</button>
 </div>
@@ -294,7 +286,7 @@ alert("Passwords do not match");
 return;
 }
 auth.createUserWithEmailAndPassword(email.value,password.value)
-.then((userCredential)=>{
+.then(userCredential=>{
 db.collection("users").doc(userCredential.user.uid).set({
 name:name.value,
 email:email.value,
@@ -315,7 +307,7 @@ auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value)
 }
 
 /* Auth State */
-auth.onAuthStateChanged((user)=>{
+auth.onAuthStateChanged(user=>{
 if(user){
 profileSection.style.display="block";
 bottomNav.style.display="flex";
@@ -329,28 +321,42 @@ wallet.innerText=doc.data().wallet;
 }else{
 profileSection.style.display="none";
 bottomNav.style.display="none";
-username.innerText="Guest User";
-wallet.innerText="0";
 }
 });
 
-/* RANDOM LIVE WITHDRAW */
+/* FAST CONTINUOUS LIVE WITHDRAW */
 const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun","Karan","Sneha","Deepak","Priya","Ankit","Riya","Manish","Komal"];
+const container=document.getElementById("withdrawList");
 
-function generateWithdraw(){
-let container=document.getElementById("withdrawList");
-container.innerHTML="";
-for(let i=0;i<12;i++){
+function createItem(){
 let randomName=names[Math.floor(Math.random()*names.length)];
 let randomAmount=Math.floor(Math.random()*4400)+100;
 let div=document.createElement("div");
 div.className="withdraw-item";
 div.innerText=randomName+" Withdraw ₹"+randomAmount;
-container.appendChild(div);
+return div;
 }
+
+for(let i=0;i<25;i++){
+container.appendChild(createItem());
 }
-generateWithdraw();
-setInterval(generateWithdraw,15000);
+
+/* Duplicate for infinite loop */
+container.innerHTML+=container.innerHTML;
+
+let scrollSpeed=2.5; 
+let scrollPosition=0;
+
+function smoothScroll(){
+scrollPosition+=scrollSpeed;
+container.style.transform=`translateY(-${scrollPosition}px)`;
+if(scrollPosition>=container.scrollHeight/2){
+scrollPosition=0;
+}
+requestAnimationFrame(smoothScroll);
+}
+
+smoothScroll();
 </script>
 
 </body>
