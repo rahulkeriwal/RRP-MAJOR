@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <meta charset="UTF-8">
 <title>RRP Earn</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -219,22 +220,65 @@ color:#333;
 </div>
 
 <!-- BOTTOM NAVIGATION -->
+<style>
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #ffffff;
+        display: none; /* Login ke baad flex ho jayega */
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+        border-radius: 15px 15px 0 0;
+        z-index: 1000;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: none;
+        border: none;
+        color: #555;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        flex: 1;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 4px;
+        color: #f39c12; /* Icon color theme se match karega */
+    }
+
+    .nav-item:active {
+        transform: scale(0.9);
+        color: #f39c12;
+    }
+</style>
+
 <div class="bottom-nav" id="bottomNav">
-    <button onclick="goHome()">
-        <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" style="width:20px; vertical-align:middle; margin-right:5px;">
-        Home
+    <button class="nav-item" onclick="showPage('homePage')">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
     </button>
-    <button>
-        <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" style="width:20px; vertical-align:middle; margin-right:5px;">
-        Team
+    
+    <button class="nav-item">
+        <i class="fa-solid fa-users"></i>
+        <span>Team</span>
     </button>
-    <button>
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149302.png" style="width:20px; vertical-align:middle; margin-right:5px;">
-        Task
+    
+    <button class="nav-item">
+        <i class="fa-solid fa-list-check"></i>
+        <span>Task</span>
     </button>
-    <button>
-        <img src="https://cdn-icons-png.flaticon.com/512/1170/1170576.png" style="width:20px; vertical-align:middle; margin-right:5px;">
-        Withdraw
+    
+    <button class="nav-item">
+        <i class="fa-solid fa-wallet"></i>
+        <span>Withdraw</span>
     </button>
 </div>
 
