@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>RRP Earn</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
         body {
             margin: 0;
@@ -33,10 +32,10 @@
             cursor: pointer;
         }
 
-        /* TOP IMAGE */
+        /* TOP BANNER */
         .top-banner {
             width: 100%;
-            height: 33vh;
+            height: 30vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -50,12 +49,12 @@
             border-radius: 12px;
         }
 
-        /* Notice */
         .notice {
             background: #ff9800;
             padding: 8px;
             text-align: center;
             font-weight: bold;
+            font-size: 14px;
         }
 
         /* Home Section */
@@ -74,9 +73,9 @@
 
         .box {
             flex: 1;
-            height: 95px;
+            height: 90px;
             background: white;
-            border-radius: 18px;
+            border-radius: 15px;
             color: black;
             display: flex;
             flex-direction: column;
@@ -85,15 +84,20 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 11px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        .box img {
-            width: 30px;
-            margin-bottom: 6px;
+        .box img { width: 30px; margin-bottom: 5px; }
+
+        /* Profile & Live Withdraw */
+        .profile {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
         }
 
-        /* LIVE WITHDRAW */
         .live-box {
             margin-top: 25px;
             background: rgba(255, 255, 255, 0.1);
@@ -101,86 +105,34 @@
             border-radius: 15px;
         }
 
-        .withdraw-container {
-            height: 130px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #withdrawList {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .withdraw-container { height: 120px; overflow: hidden; position: relative; }
         .withdraw-item {
-            background: white;
-            color: black;
-            margin: 6px 0;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: left;
-        }
-
-        /* Profile */
-        .profile {
-            margin-top: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 20px;
-            display: none;
+            background: white; color: black; margin: 5px 0;
+            padding: 8px; border-radius: 8px; font-size: 13px; font-weight: bold;
         }
 
         /* Auth Pages */
-        .auth-page {
-            display: none;
-            padding: 30px 20px;
-            text-align: center;
-        }
-
+        .auth-page { display: none; padding: 40px 20px; text-align: center; }
         .auth-page input {
-            width: 90%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #ccc;
+            width: 90%; padding: 12px; margin: 10px 0;
+            border-radius: 8px; border: none; outline: none;
         }
-
         .auth-page button {
-            padding: 12px;
-            width: 95%;
-            background: #ff9800;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            margin-top: 10px;
-            cursor: pointer;
+            padding: 12px; width: 95%; background: #ff9800;
+            border: none; border-radius: 8px; color: white;
+            font-weight: bold; cursor: pointer;
         }
 
-        /* Bottom Nav */
+        /* Navigation */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            color: black;
-            display: none;
-            justify-content: space-around;
-            padding: 12px 0;
+            position: fixed; bottom: 0; width: 100%;
+            background: white; display: none;
+            justify-content: space-around; padding: 12px 0;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
         }
-
-        .bottom-nav button {
-            background: none;
-            border: none;
-            font-weight: bold;
-            color: #333;
-        }
+        .bottom-nav button { background: none; border: none; font-weight: bold; color: #333; }
     </style>
 </head>
-
 <body>
 
 <div class="header">
@@ -195,58 +147,46 @@
 </div>
 
 <div class="top-banner">
-    <img src="https://i.ibb.co/S7yF8s7h/your-image.jpg" alt="RRP Banner">
+    <img src="https://i.ibb.co/S7yF8s7h/your-image.jpg" alt="Banner">
 </div>
 
-<div class="notice">
-    🔥 Join Telegram & Earn 130₹ Instantly 🔥
-</div>
+<div class="notice">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
 
 <div class="home-section" id="homePage">
     <div class="top-section">
-        <a href="https://t.me/rrp_major" class="box" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="TG"> Telegram
-        </a>
-        <a href="#" class="box">
-            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WA"> WhatsApp
-        </a>
-        <a href="#" class="box">
-            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Chat"> Chat Us
-        </a>
-        <a href="#" class="box">
-            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YT"> YouTube
-        </a>
+        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram</a>
+        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp</a>
+        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">Chat Us</a>
+        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube</a>
     </div>
 
     <div class="profile" id="profileSection">
-        <h2 id="displayUsername">Welcome!</h2>
-        <h1>₹ <span id="walletBalance">0</span></h1>
+        <h2 id="dispName">Welcome User</h2>
+        <h1>₹ <span id="dispWallet">0</span></h1>
     </div>
 
     <div class="live-box">
         <h3>🔥 Live Withdraw</h3>
-        <div class="withdraw-container">
-            <div id="withdrawList"></div>
-        </div>
+        <div class="withdraw-container"><div id="withdrawList"></div></div>
     </div>
 </div>
 
 <div class="auth-page" id="loginPage">
     <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginPassword" placeholder="Password">
+    <input type="email" id="lEmail" placeholder="Email">
+    <input type="password" id="lPass" placeholder="Password">
     <button onclick="loginUser()">Login</button>
-    <button style="background:#555;" onclick="goHome()">Back</button>
+    <button style="background:#555; margin-top:10px;" onclick="goHome()">Back</button>
 </div>
 
 <div class="auth-page" id="registerPage">
     <h2>Register</h2>
-    <input type="text" id="regName" placeholder="Full Name">
-    <input type="email" id="regEmail" placeholder="Email">
-    <input type="password" id="regPass" placeholder="Password">
-    <input type="password" id="regConfirmPass" placeholder="Confirm Password">
-    <button onclick="registerUser()">Register Now</button>
-    <button style="background:#555;" onclick="goHome()">Back</button>
+    <input type="text" id="rName" placeholder="Full Name">
+    <input type="email" id="rEmail" placeholder="Email">
+    <input type="password" id="rPass" placeholder="Password">
+    <input type="password" id="rCPass" placeholder="Confirm Password">
+    <button id="regBtn" onclick="registerUser()">Register Now</button>
+    <button style="background:#555; margin-top:10px;" onclick="goHome()">Back</button>
 </div>
 
 <div class="bottom-nav" id="bottomNav">
@@ -279,126 +219,108 @@ const firebaseConfig = {
   measurementId: "G-J6X9KHPXJQ"
 
 };
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Navigation Functions
-function showLogin(){
-    document.getElementById("homePage").style.display="none";
-    document.getElementById("registerPage").style.display="none";
-    document.getElementById("loginPage").style.display="block";
+// UI Navigation
+function showLogin(){ 
+    document.getElementById("homePage").style.display="none"; 
+    document.getElementById("registerPage").style.display="none"; 
+    document.getElementById("loginPage").style.display="block"; 
 }
-function showRegister(){
-    document.getElementById("homePage").style.display="none";
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("registerPage").style.display="block";
+function showRegister(){ 
+    document.getElementById("homePage").style.display="none"; 
+    document.getElementById("loginPage").style.display="none"; 
+    document.getElementById("registerPage").style.display="block"; 
 }
-function goHome(){
-    document.getElementById("homePage").style.display="block";
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("registerPage").style.display="none";
+function goHome(){ 
+    document.getElementById("homePage").style.display="block"; 
+    document.getElementById("loginPage").style.display="none"; 
+    document.getElementById("registerPage").style.display="none"; 
 }
 
-// 2. REGISTER USER FUNCTION
+// REGISTER FUNCTION WITH AUTO-LOGIN
 function registerUser(){
-    const name = document.getElementById("regName").value;
-    const email = document.getElementById("regEmail").value;
-    const pass = document.getElementById("regPass").value;
-    const confirmPass = document.getElementById("regConfirmPass").value;
+    const name = document.getElementById("rName").value;
+    const email = document.getElementById("rEmail").value;
+    const pass = document.getElementById("rPass").value;
+    const cPass = document.getElementById("rCPass").value;
+    const btn = document.getElementById("regBtn");
 
-    if(pass !== confirmPass){ alert("Password match nahi ho raha!"); return; }
-    if(name === "" || email === ""){ alert("Sabhi fields bharein!"); return; }
+    if(pass !== cPass){ alert("Password match nahi hua!"); return; }
+    if(!name || !email || !pass){ alert("Sari details bhariye!"); return; }
+
+    btn.disabled = true;
+    btn.innerText = "Processing...";
 
     auth.createUserWithEmailAndPassword(email, pass)
-    .then(userCredential => {
-        const user = userCredential.user;
-        // Data save in Firestore
-        return db.collection("users").doc(user.uid).set({
+    .then(cred => {
+        // Firestore mein data save karein
+        return db.collection("users").doc(cred.user.uid).set({
             name: name,
             email: email,
-            wallet: 0,
+            wallet: 130, // Joining Bonus
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
     })
     .then(() => {
-        alert("Registration Successful!");
-        goHome();
+        alert("Registration Successful! Welcome " + name);
+        goHome(); // Automatic redirect to Home
     })
-    .catch(error => alert(error.message));
+    .catch(err => {
+        alert(err.message);
+        btn.disabled = false;
+        btn.innerText = "Register Now";
+    });
 }
 
-// 3. LOGIN USER FUNCTION
 function loginUser(){
-    const email = document.getElementById("loginEmail").value;
-    const pass = document.getElementById("loginPassword").value;
-
+    const email = document.getElementById("lEmail").value;
+    const pass = document.getElementById("lPass").value;
     auth.signInWithEmailAndPassword(email, pass)
-    .then(() => {
-        alert("Login Successful!");
-        goHome();
-    })
-    .catch(error => alert(error.message));
+    .then(() => { alert("Login Success!"); goHome(); })
+    .catch(err => alert(err.message));
 }
 
-// 4. LOGOUT
-function logout(){
-    auth.signOut().then(()=> location.reload());
-}
+function logout(){ auth.signOut().then(()=> location.reload()); }
 
-// 5. AUTH STATE MONITORING
+// Auth Monitor: Profile aur Nav Control karta hai
 auth.onAuthStateChanged(user => {
-    const profileSection = document.getElementById("profileSection");
-    const bottomNav = document.getElementById("bottomNav");
-    const authButtons = document.getElementById("authButtons");
-    const logoutBtn = document.getElementById("logoutBtn");
-
     if(user){
-        profileSection.style.display = "block";
-        bottomNav.style.display = "flex";
-        authButtons.style.display = "none";
-        logoutBtn.style.display = "block";
+        document.getElementById("profileSection").style.display = "block";
+        document.getElementById("bottomNav").style.display = "flex";
+        document.getElementById("authButtons").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "block";
 
         db.collection("users").doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
-                document.getElementById("displayUsername").innerText = "Hi, " + doc.data().name;
-                document.getElementById("walletBalance").innerText = doc.data().wallet;
+                document.getElementById("dispName").innerText = "Hi, " + doc.data().name;
+                document.getElementById("dispWallet").innerText = doc.data().wallet;
             }
         });
-    } else {
-        profileSection.style.display = "none";
-        bottomNav.style.display = "none";
-        authButtons.style.display = "block";
-        logoutBtn.style.display = "none";
     }
 });
 
-/* LIVE WITHDRAW ANIMATION */
-const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun","Karan","Sneha","Deepak","Priya","Ankit","Riya","Manish","Komal"];
-const container = document.getElementById("withdrawList");
-
-function createItem(){
-    let randomName = names[Math.floor(Math.random()*names.length)];
-    let randomAmount = Math.floor(Math.random()*4400)+100;
+// Live Withdraw Animation
+const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun"];
+const list = document.getElementById("withdrawList");
+function addItem(){
     let div = document.createElement("div");
     div.className = "withdraw-item";
-    div.innerText = "💸 " + randomName + " Withdrew ₹" + randomAmount;
+    div.innerText = "💸 " + names[Math.floor(Math.random()*names.length)] + " Withdrew ₹" + (Math.floor(Math.random()*4000)+100);
     return div;
 }
-
-for(let i=0; i<15; i++){ container.appendChild(createItem()); }
-container.innerHTML += container.innerHTML;
-
-let scrollPosition = 0;
-function smoothScroll(){
-    scrollPosition += 0.8;
-    container.style.transform = `translateY(-${scrollPosition}px)`;
-    if(scrollPosition >= container.scrollHeight/2){ scrollPosition = 0; }
-    requestAnimationFrame(smoothScroll);
+for(let i=0; i<10; i++){ list.appendChild(addItem()); }
+list.innerHTML += list.innerHTML;
+let pos = 0;
+function scroll(){
+    pos += 0.7;
+    list.style.transform = `translateY(-${pos}px)`;
+    if(pos >= list.scrollHeight/2) pos = 0;
+    requestAnimationFrame(scroll);
 }
-smoothScroll();
+scroll();
 </script>
-
 </body>
 </html>
