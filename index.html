@@ -11,6 +11,25 @@ body{
     background:#f2f2f2;
 }
 
+/* Top Header */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 15px;
+    background:#fff;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.auth-buttons button{
+    margin-left:8px;
+    padding:6px 12px;
+    border:none;
+    border-radius:5px;
+    background:#ff9800;
+    color:#fff;
+}
+
 /* Notice */
 .notice{
     background:#ff9800;
@@ -19,7 +38,7 @@ body{
     font-weight:bold;
 }
 
-/* Top Boxes */
+/* Boxes */
 .top-section{
     display:flex;
     justify-content:center;
@@ -40,11 +59,6 @@ body{
     align-items:center;
     text-decoration:none;
     color:black;
-    transition:0.3s;
-}
-
-.box:hover{
-    transform:scale(1.05);
 }
 
 .box img{
@@ -63,16 +77,31 @@ body{
     border-radius:50%;
 }
 
-/* Auth Section */
-.auth{
-    text-align:center;
-    margin-top:20px;
+/* Popup */
+.popup{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
 }
 
-.auth input{
-    width:80%;
+.popup-content{
+    background:#fff;
+    padding:20px;
+    width:90%;
+    max-width:350px;
+    border-radius:10px;
+}
+
+.popup-content input{
+    width:100%;
     padding:8px;
-    margin:5px;
+    margin:6px 0;
 }
 
 /* Bottom Nav */
@@ -90,21 +119,28 @@ body{
 .bottom-nav button{
     background:none;
     border:none;
-    font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Header -->
+<div class="header">
+    <h3>RRP Earn</h3>
+    <div class="auth-buttons">
+        <button onclick="openLogin()">Login</button>
+        <button onclick="openRegister()">Register</button>
+    </div>
+</div>
+
 <!-- Notice -->
 <div class="notice">
-<marquee>🔥 Join Telegram & Earn 130₹ Instantly | Refer & Earn More 🔥</marquee>
+<marquee>🔥 Join Telegram & Earn 130₹ Instantly 🔥</marquee>
 </div>
 
 <!-- Top Buttons -->
 <div class="top-section">
-
 <a href="https://t.me/rrp_major" class="box">
 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
 Telegram
@@ -119,7 +155,6 @@ WhatsApp
 <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
 Chat Us
 </a>
-
 </div>
 
 <!-- Profile -->
@@ -129,14 +164,29 @@ Chat Us
 <p>Wallet Balance: ₹<span id="wallet">0</span></p>
 </div>
 
-<!-- Login / Register -->
-<div class="auth">
-<h2>Login / Register</h2>
-<input type="email" id="email" placeholder="Enter Email"><br>
-<input type="password" id="password" placeholder="Enter Password"><br>
+<!-- Register Popup -->
+<div class="popup" id="registerPopup">
+<div class="popup-content">
+<h3>Register</h3>
+<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+<input type="password" id="confirmPassword" placeholder="Confirm Password">
+<input type="text" id="inviteCode" placeholder="Invitation Code">
 <button onclick="registerUser()">Register</button>
+<button onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<!-- Login Popup -->
+<div class="popup" id="loginPopup">
+<div class="popup-content">
+<h3>Login</h3>
+<input type="email" id="loginEmail" placeholder="Email">
+<input type="password" id="loginPassword" placeholder="Password">
 <button onclick="loginUser()">Login</button>
-<button onclick="logoutUser()">Logout</button>
+<button onclick="closePopup()">Close</button>
+</div>
 </div>
 
 <!-- Bottom Navigation -->
@@ -148,18 +198,14 @@ Chat Us
 </div>
 
 
-<!-- ================= FIREBASE SDK ================= -->
+<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
 
-/* =========================
-   🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO
-   Firebase Console → Project Settings → Web App → firebaseConfig
-========================= */
-
+/* 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO */
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -170,70 +216,80 @@ const firebaseConfig = {
   measurementId: "G-J6X9KHPXJQ"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+function openRegister(){
+document.getElementById("registerPopup").style.display="flex";
+}
 
-// ================= REGISTER =================
+function openLogin(){
+document.getElementById("loginPopup").style.display="flex";
+}
+
+function closePopup(){
+document.getElementById("registerPopup").style.display="none";
+document.getElementById("loginPopup").style.display="none";
+}
+
 function registerUser(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+let confirmPassword=document.getElementById("confirmPassword").value;
+let invite=document.getElementById("inviteCode").value;
+
+if(password!==confirmPassword){
+alert("Passwords do not match");
+return;
+}
 
 auth.createUserWithEmailAndPassword(email,password)
 .then((userCredential)=>{
-let user = userCredential.user;
+let user=userCredential.user;
 
 db.collection("users").doc(user.uid).set({
-email: email,
-wallet: 0,
-createdAt: new Date()
+name:name,
+email:email,
+wallet:0,
+inviteCode:invite,
+createdAt:new Date()
 });
 
 alert("Registration Successful!");
+closePopup();
 })
 .catch((error)=>{
 alert(error.message);
 });
 }
 
-
-// ================= LOGIN =================
 function loginUser(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
+let email=document.getElementById("loginEmail").value;
+let password=document.getElementById("loginPassword").value;
 
 auth.signInWithEmailAndPassword(email,password)
-.then((userCredential)=>{
+.then(()=>{
 alert("Login Successful!");
+closePopup();
 })
 .catch((error)=>{
 alert(error.message);
 });
 }
 
-
-// ================= LOGOUT =================
-function logoutUser(){
-auth.signOut();
-alert("Logged Out!");
-}
-
-
-// ================= AUTO USER DATA SHOW =================
 auth.onAuthStateChanged((user)=>{
 if(user){
-document.getElementById("username").innerText = user.email;
-
 db.collection("users").doc(user.uid).get().then((doc)=>{
 if(doc.exists){
-document.getElementById("wallet").innerText = doc.data().wallet;
+document.getElementById("username").innerText=doc.data().name;
+document.getElementById("wallet").innerText=doc.data().wallet;
 }
 });
 }else{
-document.getElementById("username").innerText = "Guest User";
-document.getElementById("wallet").innerText = "0";
+document.getElementById("username").innerText="Guest User";
+document.getElementById("wallet").innerText="0";
 }
 });
 
