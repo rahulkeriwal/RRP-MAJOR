@@ -41,11 +41,11 @@ white-space:nowrap;
 display:inline-block;
 padding:8px 0;
 font-weight:bold;
-animation:slide 12s linear infinite;
+animation:slide 10s linear infinite;
 }
 @keyframes slide{
-from{transform:translateX(100%);}
-to{transform:translateX(-100%);}
+from{ transform:translateX(100%);}
+to{ transform:translateX(-100%);}
 }
 
 /* HOME */
@@ -143,37 +143,6 @@ border:none;
 font-weight:bold;
 color:#333;
 }
-
-/* LIVE WITHDRAW */
-.live-box{
-width:95%;
-max-width:400px;
-margin:10px auto;
-background:#fff;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-overflow:hidden;
-}
-
-.live-title{
-background:#28a745;
-color:#fff;
-padding:8px;
-text-align:center;
-font-weight:bold;
-}
-
-.live-list{
-height:120px;
-overflow:hidden;
-padding:10px;
-}
-
-.live-item{
-padding:5px 0;
-font-size:14px;
-color:#333;
-}
 </style>
 </head>
 <body>
@@ -227,12 +196,6 @@ YouTube
 </div>
 </div>
 
-<!-- LIVE WITHDRAW -->
-<div class="live-box">
-<div class="live-title">🔥 Live Withdraw</div>
-<div class="live-list" id="liveWithdraw"></div>
-</div>
-
 </div>
 
 <!-- LOGIN -->
@@ -267,6 +230,8 @@ YouTube
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
+
+// 🔴 APNA FIREBASE CONFIG YAHA PASTE KARO
 const firebaseConfig = {
 
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
@@ -284,25 +249,26 @@ const firebaseConfig = {
  measurementId: "G-J6X9KHPXJQ"
 
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-/* UI Navigation */
-function showLogin(){ 
-homePage.style.display="none"; 
-registerPage.style.display="none"; 
-loginPage.style.display="block"; 
+/* Navigation */
+function showLogin(){
+homePage.style.display="none";
+registerPage.style.display="none";
+loginPage.style.display="block";
 }
-function showRegister(){ 
-homePage.style.display="none"; 
-loginPage.style.display="none"; 
-registerPage.style.display="block"; 
+function showRegister(){
+homePage.style.display="none";
+loginPage.style.display="none";
+registerPage.style.display="block";
 }
-function goHome(){ 
-homePage.style.display="block"; 
-loginPage.style.display="none"; 
-registerPage.style.display="none"; 
+function goHome(){
+homePage.style.display="block";
+loginPage.style.display="none";
+registerPage.style.display="none";
 }
 
 /* Register */
@@ -310,9 +276,10 @@ function registerUser(){
 const name=rName.value.trim();
 const email=rEmail.value.trim();
 const pass=rPass.value.trim();
-const cPass=rCPass.value.trim();
-if(pass!==cPass){alert("Password not match!");return;}
-if(!name||!email||!pass){alert("Fill all fields!");return;}
+const cpass=rCPass.value.trim();
+
+if(!name||!email||!pass){alert("Fill all fields");return;}
+if(pass!==cpass){alert("Password not match");return;}
 
 auth.createUserWithEmailAndPassword(email,pass)
 .then(cred=>{
@@ -328,7 +295,7 @@ function loginUser(){
 const email=lEmail.value.trim();
 const pass=lPass.value.trim();
 auth.signInWithEmailAndPassword(email,pass)
-.catch(err=>alert(err.message));
+.catch(()=>alert("Invalid Email or Password"));
 }
 
 /* Logout */
@@ -362,28 +329,6 @@ logoutBtn.style.display="none";
 }
 });
 
-/* LIVE WITHDRAW */
-const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun"];
-const list=document.getElementById("liveWithdraw");
-
-function addItem(){
-let div=document.createElement("div");
-div.className="live-item";
-div.innerText="💸 "+names[Math.floor(Math.random()*names.length)]+" Withdrew ₹"+(Math.floor(Math.random()*400)+50);
-return div;
-}
-for(let i=0;i<10;i++){list.appendChild(addItem());}
-
-list.innerHTML+=list.innerHTML;
-let pos=0;
-function scroll(){
-pos+=0.7;
-list.style.transform=`translateY(-${pos}px)`;
-if(pos>=list.scrollHeight/2) pos=0;
-requestAnimationFrame(scroll);
-}
-scroll();
 </script>
-
 </body>
 </html>
