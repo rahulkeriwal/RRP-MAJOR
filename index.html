@@ -30,12 +30,27 @@ color:white;
 font-weight:bold;
 }
 
+/* TOP IMAGE */
+.top-banner{
+width:100%;
+text-align:center;
+margin-top:10px;
+}
+
+.top-banner img{
+width:90%;
+max-width:420px;
+border-radius:15px;
+box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
+
 /* Notice */
 .notice{
 background:#ff9800;
 padding:8px;
 text-align:center;
 font-weight:bold;
+margin-top:10px;
 }
 
 /* Home */
@@ -44,7 +59,7 @@ padding:20px;
 text-align:center;
 }
 
-/* 4 ICONS ROW */
+/* 4 ICONS */
 .top-section{
 display:flex;
 justify-content:space-between;
@@ -66,11 +81,6 @@ text-decoration:none;
 font-weight:bold;
 font-size:13px;
 box-shadow:0 6px 15px rgba(0,0,0,0.3);
-transition:0.3s;
-}
-
-.box:hover{
-transform:scale(1.05);
 }
 
 .box img{
@@ -172,6 +182,11 @@ font-weight:bold;
 </div>
 </div>
 
+<!-- TOP IMAGE -->
+<div class="top-banner">
+<img src="https://i.ibb.co/S7yF8s7h/your-image.jpg" alt="RRP Banner">
+</div>
+
 <div class="notice">
 🔥 Join Telegram & Earn 130₹ Instantly 🔥
 </div>
@@ -243,7 +258,6 @@ YouTube
 <button>Withdraw</button>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -262,57 +276,32 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-/* Page Switch */
-function showLogin(){
-homePage.style.display="none";
-registerPage.style.display="none";
-loginPage.style.display="block";
-}
-function showRegister(){
-homePage.style.display="none";
-loginPage.style.display="none";
-registerPage.style.display="block";
-}
-function goHome(){
-homePage.style.display="block";
-loginPage.style.display="none";
-registerPage.style.display="none";
-}
+function showLogin(){homePage.style.display="none";registerPage.style.display="none";loginPage.style.display="block";}
+function showRegister(){homePage.style.display="none";loginPage.style.display="none";registerPage.style.display="block";}
+function goHome(){homePage.style.display="block";loginPage.style.display="none";registerPage.style.display="none";}
 
-/* Register */
 function registerUser(){
-if(password.value!==confirmPassword.value){
-alert("Passwords do not match");
-return;
-}
+if(password.value!==confirmPassword.value){alert("Passwords do not match");return;}
 auth.createUserWithEmailAndPassword(email.value,password.value)
-.then(userCredential=>{
-db.collection("users").doc(userCredential.user.uid).set({
-name:name.value,
-email:email.value,
-wallet:0,
-createdAt:new Date()
+.then(user=>{
+db.collection("users").doc(user.user.uid).set({
+name:name.value,email:email.value,wallet:0,createdAt:new Date()
 });
-alert("Registration Successful!");
-goHome();
-})
-.catch(error=>alert(error.message));
+alert("Registration Successful!");goHome();
+}).catch(e=>alert(e.message));
 }
 
-/* Login */
 function loginUser(){
 auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value)
 .then(()=>{alert("Login Successful!");goHome();})
-.catch(error=>alert(error.message));
+.catch(e=>alert(e.message));
 }
 
-/* Auth State */
 auth.onAuthStateChanged(user=>{
 if(user){
 profileSection.style.display="block";
 bottomNav.style.display="flex";
-db.collection("users").doc(user.uid)
-.onSnapshot(doc=>{
+db.collection("users").doc(user.uid).onSnapshot(doc=>{
 if(doc.exists){
 username.innerText=doc.data().name;
 wallet.innerText=doc.data().wallet;
@@ -337,25 +326,18 @@ div.innerText=randomName+" Withdraw ₹"+randomAmount;
 return div;
 }
 
-for(let i=0;i<25;i++){
-container.appendChild(createItem());
-}
-
-/* Duplicate for infinite loop */
+for(let i=0;i<25;i++){container.appendChild(createItem());}
 container.innerHTML+=container.innerHTML;
 
-let scrollSpeed=2.5; 
+let scrollSpeed=3;
 let scrollPosition=0;
 
 function smoothScroll(){
 scrollPosition+=scrollSpeed;
 container.style.transform=`translateY(-${scrollPosition}px)`;
-if(scrollPosition>=container.scrollHeight/2){
-scrollPosition=0;
-}
+if(scrollPosition>=container.scrollHeight/2){scrollPosition=0;}
 requestAnimationFrame(smoothScroll);
 }
-
 smoothScroll();
 </script>
 
