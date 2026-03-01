@@ -44,19 +44,21 @@ padding:20px;
 text-align:center;
 }
 
+/* 4 ICON ROW */
 .top-section{
 display:flex;
 justify-content:center;
-gap:20px;
-flex-wrap:wrap;
+gap:15px;
 margin-top:20px;
+flex-wrap:nowrap;
 }
 
 .box{
-width:110px;
-height:110px;
+flex:1;
+max-width:90px;
+height:95px;
 background:white;
-border-radius:20px;
+border-radius:18px;
 color:black;
 display:flex;
 flex-direction:column;
@@ -64,7 +66,8 @@ justify-content:center;
 align-items:center;
 text-decoration:none;
 font-weight:bold;
-box-shadow:0 8px 20px rgba(0,0,0,0.3);
+font-size:13px;
+box-shadow:0 6px 15px rgba(0,0,0,0.3);
 transition:0.3s;
 }
 
@@ -73,8 +76,8 @@ transform:scale(1.05);
 }
 
 .box img{
-width:45px;
-margin-bottom:8px;
+width:35px;
+margin-bottom:6px;
 }
 
 /* Profile Card */
@@ -83,6 +86,7 @@ margin-top:30px;
 background:rgba(255,255,255,0.1);
 padding:20px;
 border-radius:20px;
+display:none;
 }
 
 /* Auth Pages */
@@ -118,7 +122,7 @@ bottom:0;
 width:100%;
 background:white;
 color:black;
-display:flex;
+display:none;
 justify-content:space-around;
 padding:12px 0;
 }
@@ -149,12 +153,12 @@ font-weight:bold;
 <div class="home-section" id="homePage">
 
 <div class="top-section">
-<a href="https://t.me/rrp_major" class="box">
+<a href="https://t.me/rrp_major" class="box" target="_blank">
 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
 Telegram
 </a>
 
-<a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box">
+<a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">
 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
 WhatsApp
 </a>
@@ -163,9 +167,14 @@ WhatsApp
 <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
 Chat Us
 </a>
+
+<a href="https://youtube.com" class="box" target="_blank">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+YouTube
+</a>
 </div>
 
-<div class="profile">
+<div class="profile" id="profileSection">
 <h2 id="username">Guest User</h2>
 <h1>₹ <span id="wallet">0</span></h1>
 </div>
@@ -193,13 +202,12 @@ Chat Us
 <button onclick="goHome()">Back</button>
 </div>
 
-<div class="bottom-nav">
+<div class="bottom-nav" id="bottomNav">
 <button onclick="goHome()">Home</button>
 <button>Team</button>
 <button>Task</button>
 <button>Withdraw</button>
 </div>
-
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -208,7 +216,6 @@ Chat Us
 
 <script>
 
-/* 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO */
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -224,29 +231,29 @@ const db = firebase.firestore();
 
 /* Page Switch */
 function showLogin(){
-document.getElementById("homePage").style.display="none";
-document.getElementById("registerPage").style.display="none";
-document.getElementById("loginPage").style.display="block";
+homePage.style.display="none";
+registerPage.style.display="none";
+loginPage.style.display="block";
 }
 
 function showRegister(){
-document.getElementById("homePage").style.display="none";
-document.getElementById("loginPage").style.display="none";
-document.getElementById("registerPage").style.display="block";
+homePage.style.display="none";
+loginPage.style.display="none";
+registerPage.style.display="block";
 }
 
 function goHome(){
-document.getElementById("homePage").style.display="block";
-document.getElementById("loginPage").style.display="none";
-document.getElementById("registerPage").style.display="none";
+homePage.style.display="block";
+loginPage.style.display="none";
+registerPage.style.display="none";
 }
 
 /* Register */
 function registerUser(){
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let password=document.getElementById("password").value;
-let confirm=document.getElementById("confirmPassword").value;
+let name=name.value;
+let email=email.value;
+let password=password.value;
+let confirm=confirmPassword.value;
 
 if(password!==confirm){
 alert("Passwords do not match");
@@ -274,10 +281,7 @@ alert(error.message);
 
 /* Login */
 function loginUser(){
-let email=document.getElementById("loginEmail").value;
-let password=document.getElementById("loginPassword").value;
-
-auth.signInWithEmailAndPassword(email,password)
+auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value)
 .then(()=>{
 alert("Login Successful!");
 goHome();
@@ -287,18 +291,27 @@ alert(error.message);
 });
 }
 
-/* Auto Update User */
+/* Auth State */
 auth.onAuthStateChanged((user)=>{
 if(user){
-db.collection("users").doc(user.uid).onSnapshot((doc)=>{
+
+profileSection.style.display="block";
+bottomNav.style.display="flex";
+
+db.collection("users").doc(user.uid)
+.onSnapshot((doc)=>{
 if(doc.exists){
-document.getElementById("username").innerText=doc.data().name;
-document.getElementById("wallet").innerText=doc.data().wallet;
+username.innerText=doc.data().name;
+wallet.innerText=doc.data().wallet;
 }
 });
+
 }else{
-document.getElementById("username").innerText="Guest User";
-document.getElementById("wallet").innerText="0";
+
+profileSection.style.display="none";
+bottomNav.style.display="none";
+username.innerText="Guest User";
+wallet.innerText="0";
 }
 });
 
