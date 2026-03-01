@@ -11,10 +11,9 @@ margin:0;
 font-family:Segoe UI;
 background:linear-gradient(135deg,#1e3c72,#2a5298);
 color:white;
-min-height:100vh;
 }
 
-/* Header */
+/* HEADER */
 .header{
 display:flex;
 justify-content:space-between;
@@ -32,69 +31,77 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* Banner */
-.top-banner{
-width:100%;
-height:30vh;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-top:10px;
-}
-.top-banner img{
-max-width:90%;
-max-height:100%;
-object-fit:contain;
-border-radius:12px;
-}
-
-/* Notice */
-.notice{
+/* SLIDING NOTICE */
+.notice-wrapper{
 background:#ff9800;
-padding:8px;
-text-align:center;
+overflow:hidden;
+white-space:nowrap;
+}
+.notice-text{
+display:inline-block;
+padding:8px 0;
 font-weight:bold;
-font-size:14px;
+animation:slide 10s linear infinite;
+}
+@keyframes slide{
+from{ transform:translateX(100%);}
+to{ transform:translateX(-100%);}
 }
 
-/* Home */
+/* HOME */
 .home-section{
 padding:20px;
 text-align:center;
 padding-bottom:80px;
 }
 
-.profile{
+/* 4 BOXES */
+.top-section{
+display:flex;
+justify-content:space-between;
+gap:10px;
 margin-top:20px;
-background:rgba(255,255,255,0.2);
-padding:20px;
+}
+.box{
+flex:1;
+height:90px;
+background:white;
 border-radius:15px;
-display:none;
+color:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+font-weight:bold;
+font-size:11px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+.box img{
+width:30px;
+margin-bottom:5px;
 }
 
-/* Live Withdraw */
-.live-box{
+/* PROFILE */
+.profile{
 margin-top:25px;
-background:rgba(255,255,255,0.1);
+text-align:center;
+display:none;
+}
+.profile img{
+width:100px;
+height:100px;
+border-radius:50%;
+border:4px solid white;
+}
+.wallet-box{
+margin-top:15px;
+background:rgba(255,255,255,0.2);
 padding:15px;
 border-radius:15px;
 }
-.withdraw-container{
-height:120px;
-overflow:hidden;
-position:relative;
-}
-.withdraw-item{
-background:white;
-color:black;
-margin:5px 0;
-padding:8px;
-border-radius:8px;
-font-size:13px;
-font-weight:bold;
-}
 
-/* Auth */
+/* AUTH */
 .auth-page{
 display:none;
 padding:40px 20px;
@@ -119,7 +126,7 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* Bottom Nav */
+/* NAV */
 .bottom-nav{
 position:fixed;
 bottom:0;
@@ -151,32 +158,47 @@ color:#333;
 </div>
 </div>
 
-<!-- Banner -->
-<div class="top-banner">
-<img src="https://i.ibb.co/S7yF8s7h/your-image.jpg">
+<!-- SLIDING NOTICE -->
+<div class="notice-wrapper">
+<div class="notice-text">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
 </div>
 
-<div class="notice">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
-
-<!-- Home -->
+<!-- HOME -->
 <div class="home-section" id="homePage">
 
+<!-- 4 FUNCTIONS -->
+<div class="top-section">
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+Telegram
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+WhatsApp
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
+Chat Us
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+YouTube
+</a>
+</div>
+
+<!-- PROFILE -->
 <div class="profile" id="profileSection">
+<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 <h2 id="dispName">Welcome</h2>
+<div class="wallet-box">
+<h3>Wallet Balance</h3>
 <h1>₹ <span id="dispWallet">0</span></h1>
 </div>
-
-<!-- Live Withdraw -->
-<div class="live-box">
-<h3>🔥 Live Withdraw</h3>
-<div class="withdraw-container">
-<div id="withdrawList"></div>
-</div>
 </div>
 
 </div>
 
-<!-- Login -->
+<!-- LOGIN -->
 <div class="auth-page" id="loginPage">
 <h2>Login</h2>
 <input type="email" id="lEmail" placeholder="Email">
@@ -185,7 +207,7 @@ color:#333;
 <button style="background:#555;margin-top:10px;" onclick="goHome()">Back</button>
 </div>
 
-<!-- Register -->
+<!-- REGISTER -->
 <div class="auth-page" id="registerPage">
 <h2>Register</h2>
 <input type="text" id="rName" placeholder="Full Name">
@@ -208,19 +230,29 @@ color:#333;
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
+
+// 🔴 APNA FIREBASE CONFIG YAHA PASTE KARO
 const firebaseConfig = {
-apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
-authDomain: "rrp-earn-app.firebaseapp.com",
-projectId: "rrp-earn-app",
-storageBucket: "rrp-earn-app.firebasestorage.app",
-messagingSenderId: "808141347086",
-appId: "1:808141347086:web:909793490facec38aadf5f",
-measurementId: "G-J6X9KHPXJQ"
+
+  apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
+
+  authDomain: "rrp-earn-app.firebaseapp.com",
+
+  projectId: "rrp-earn-app",
+
+  storageBucket: "rrp-earn-app.firebasestorage.app",
+
+  messagingSenderId: "808141347086",
+
+  appId: "1:808141347086:web:909793490facec38aadf5f",
+
+ measurementId: "G-J6X9KHPXJQ"
+
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth();
+const db=firebase.firestore();
 
 /* Navigation */
 function showLogin(){
@@ -239,7 +271,7 @@ loginPage.style.display="none";
 registerPage.style.display="none";
 }
 
-/* Register with Auto Login */
+/* Register */
 function registerUser(){
 const name=rName.value.trim();
 const email=rEmail.value.trim();
@@ -247,21 +279,15 @@ const pass=rPass.value.trim();
 const cpass=rCPass.value.trim();
 
 if(!name||!email||!pass){alert("Fill all fields");return;}
-if(pass!==cpass){alert("Password match nahi hua");return;}
+if(pass!==cpass){alert("Password not match");return;}
 
 auth.createUserWithEmailAndPassword(email,pass)
 .then(cred=>{
 return db.collection("users").doc(cred.user.uid).set({
 name:name,
-email:email,
-wallet:130,
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
+wallet:130
 });
-})
-.then(()=>{
-alert("Registration Successful!");
-})
-.catch(err=>alert(err.message));
+});
 }
 
 /* Login */
@@ -269,18 +295,21 @@ function loginUser(){
 const email=lEmail.value.trim();
 const pass=lPass.value.trim();
 auth.signInWithEmailAndPassword(email,pass)
-.then(()=>alert("Login Success!"))
-.catch(err=>alert("Email ya Password galat hai"));
+.catch(()=>alert("Invalid Email or Password"));
 }
 
 /* Logout */
 function logout(){
-auth.signOut().then(()=>alert("Logout Successful"));
+auth.signOut();
 }
 
 /* Auth State */
 auth.onAuthStateChanged(user=>{
 if(user){
+loginPage.style.display="none";
+registerPage.style.display="none";
+homePage.style.display="block";
+
 profileSection.style.display="block";
 bottomNav.style.display="flex";
 authButtons.style.display="none";
@@ -288,7 +317,7 @@ logoutBtn.style.display="block";
 
 db.collection("users").doc(user.uid).onSnapshot(doc=>{
 if(doc.exists){
-dispName.innerText="Hi, "+doc.data().name;
+dispName.innerText="Welcome, "+doc.data().name;
 dispWallet.innerText=doc.data().wallet;
 }
 });
@@ -299,29 +328,6 @@ authButtons.style.display="block";
 logoutBtn.style.display="none";
 }
 });
-
-/* Live Withdraw Animation */
-const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun"];
-const list=document.getElementById("withdrawList");
-
-function addItem(){
-let div=document.createElement("div");
-div.className="withdraw-item";
-div.innerText="💸 "+names[Math.floor(Math.random()*names.length)]+
-" Withdrew ₹"+(Math.floor(Math.random()*4000)+100);
-return div;
-}
-for(let i=0;i<10;i++){list.appendChild(addItem());}
-list.innerHTML+=list.innerHTML;
-
-let pos=0;
-function scroll(){
-pos+=0.7;
-list.style.transform=`translateY(-${pos}px)`;
-if(pos>=list.scrollHeight/2) pos=0;
-requestAnimationFrame(scroll);
-}
-scroll();
 
 </script>
 </body>
