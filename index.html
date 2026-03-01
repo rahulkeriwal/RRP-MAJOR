@@ -30,6 +30,17 @@ border-radius:20px;
 font-weight:bold;
 }
 
+/* PAGES */
+.page{
+display:none;
+padding-bottom:70px;
+}
+
+.active{
+display:block;
+}
+
+/* ICON SECTION */
 .icon-section{
 display:flex;
 justify-content:space-around;
@@ -51,10 +62,6 @@ font-size:28px;
 margin-bottom:8px;
 }
 
-.chat i{color:#4CAF50;}
-.telegram i{color:#0088cc;}
-.whatsapp i{color:#25D366;}
-
 .profile{
 background:white;
 margin:15px;
@@ -70,11 +77,51 @@ width:70px;
 border-radius:50%;
 }
 
-.wallet{
-font-weight:bold;
-color:#7b4ba3;
+/* REFERRAL SECTION */
+.ref-box{
+background:white;
+margin:15px;
+padding:15px;
+border-radius:15px;
 }
 
+.ref-input{
+display:flex;
+margin-top:10px;
+}
+
+.ref-input input{
+flex:1;
+padding:10px;
+border-radius:8px 0 0 8px;
+border:1px solid #ccc;
+}
+
+.ref-input button{
+padding:10px;
+border:none;
+background:#7b4ba3;
+color:white;
+border-radius:0 8px 8px 0;
+cursor:pointer;
+}
+
+.team-stats{
+display:flex;
+justify-content:space-between;
+margin-top:15px;
+}
+
+.team-card{
+background:#7b4ba3;
+color:white;
+padding:15px;
+border-radius:12px;
+width:48%;
+text-align:center;
+}
+
+/* NAVBAR */
 .navbar{
 position:fixed;
 bottom:0;
@@ -93,10 +140,6 @@ font-size:14px;
 font-weight:bold;
 cursor:pointer;
 }
-a{
-text-decoration:none;
-color:inherit;
-}
 </style>
 </head>
 
@@ -107,43 +150,95 @@ color:inherit;
 <div class="balance">₹ 0</div>
 </div>
 
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+
 <div class="icon-section">
-
-<div class="icon-box chat">
-<i class="fa-solid fa-comments"></i>
-<div>Chat Us</div>
-</div>
-
 <a href="https://t.me/rrp_major" target="_blank">
-<div class="icon-box telegram">
-<i class="fa-brands fa-telegram"></i>
+<div class="icon-box">
+<i class="fa-brands fa-telegram" style="color:#0088cc;"></i>
 <div>Telegram</div>
 </div>
 </a>
 
-<a href="https://whatsapp.com/channel/yourchannel" target="_blank">
-<div class="icon-box whatsapp">
-<i class="fa-brands fa-whatsapp"></i>
+<div class="icon-box">
+<i class="fa-solid fa-comments" style="color:#4CAF50;"></i>
+<div>Chat Us</div>
+</div>
+
+<div class="icon-box">
+<i class="fa-brands fa-whatsapp" style="color:#25D366;"></i>
 <div>WhatsApp</div>
 </div>
-</a>
-
 </div>
 
 <div class="profile">
 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
 <div>
 <div><b>Rahul</b></div>
-<div class="wallet">Wallet: ₹ 0</div>
+<div>Wallet: ₹ 0</div>
 </div>
 </div>
 
+</div>
+
+<!-- TEAM / REFERRAL PAGE -->
+<div id="team" class="page">
+
+<div class="ref-box">
+<h3>Your Referral ID</h3>
+<p><b id="refID">RRP10234</b></p>
+
+<h3>Referral Link</h3>
+<div class="ref-input">
+<input type="text" id="refLink" value="https://yourdomain.com/?ref=RRP10234">
+<button onclick="copyLink()">Copy</button>
+</div>
+
+<div class="team-stats">
+<div class="team-card">
+Direct Team<br><b>0</b>
+</div>
+<div class="team-card">
+Total Team<br><b>0</b>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- NAVBAR -->
 <div class="navbar">
-<button>Home</button>
-<button>Team</button>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('team')">Team</button>
 <button>Task</button>
 <button>Withdraw</button>
 </div>
+
+<script>
+
+/* ===============================
+🔥 FIREBASE REFERRAL SYSTEM YAHA ADD HOGA
+Yaha real user count & wallet connect hoga
+=============================== */
+
+function showPage(page){
+document.getElementById("home").classList.remove("active");
+document.getElementById("team").classList.remove("active");
+
+document.getElementById(page).classList.add("active");
+}
+
+function copyLink(){
+let copyText = document.getElementById("refLink");
+copyText.select();
+copyText.setSelectionRange(0,99999);
+document.execCommand("copy");
+alert("Referral Link Copied!");
+}
+
+</script>
 
 </body>
 </html>
