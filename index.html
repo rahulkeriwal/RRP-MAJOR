@@ -1,283 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>RRP Earn</title>
+<title>User Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#f2f2f2;
-}
-
-/* Top Header */
+body{margin:0;font-family:Arial;background:#f2f2f2;}
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 15px;
-    background:#fff;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+display:flex;
+justify-content:space-between;
+padding:10px;
+background:#ff9800;
+color:white;
 }
-
-.auth-buttons button{
-    margin-left:8px;
-    padding:6px 12px;
-    border:none;
-    border-radius:5px;
-    background:#ff9800;
-    color:#fff;
+.container{text-align:center;padding:20px;}
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+margin-top:20px;
 }
-
-/* Notice */
-.notice{
-    background:#ff9800;
-    color:white;
-    padding:8px;
-    font-weight:bold;
-}
-
-/* Boxes */
-.top-section{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:20px 10px;
-    flex-wrap:wrap;
-}
-
-.box{
-    width:100px;
-    height:100px;
-    background:white;
-    border-radius:15px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-decoration:none;
-    color:black;
-}
-
-.box img{
-    width:40px;
-    margin-bottom:8px;
-}
-
-/* Profile */
-.profile{
-    text-align:center;
-    margin-top:20px;
-}
-
-.profile img{
-    width:80px;
-    border-radius:50%;
-}
-
-/* Popup */
-.popup{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.5);
-    justify-content:center;
-    align-items:center;
-}
-
-.popup-content{
-    background:#fff;
-    padding:20px;
-    width:90%;
-    max-width:350px;
-    border-radius:10px;
-}
-
-.popup-content input{
-    width:100%;
-    padding:8px;
-    margin:6px 0;
-}
-
-/* Bottom Nav */
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:10px 0;
-    box-shadow:0 -2px 8px rgba(0,0,0,0.1);
-}
-
-.bottom-nav button{
-    background:none;
-    border:none;
+button{
+padding:10px 15px;
+background:#ff9800;
+border:none;
+color:white;
+border-radius:5px;
+margin:5px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Header -->
 <div class="header">
-    <h3>RRP Earn</h3>
-    <div class="auth-buttons">
-        <button onclick="openLogin()">Login</button>
-        <button onclick="openRegister()">Register</button>
-    </div>
+<h3>User Dashboard</h3>
+<button onclick="logout()">Logout</button>
 </div>
 
-<!-- Notice -->
-<div class="notice">
-<marquee>🔥 Join Telegram & Earn 130₹ Instantly 🔥</marquee>
-</div>
+<div class="container">
 
-<!-- Top Buttons -->
-<div class="top-section">
-<a href="https://t.me/rrp_major" class="box">
-<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
-Telegram
-</a>
-
-<a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-WhatsApp
-</a>
-
-<a href="#" class="box">
-<img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
-Chat Us
-</a>
-</div>
-
-<!-- Profile -->
-<div class="profile">
-<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-<h3 id="username">Guest User</h3>
+<div class="card">
+<h2 id="username">Loading...</h2>
 <p>Wallet Balance: ₹<span id="wallet">0</span></p>
+<button onclick="joinTelegram()">Join Telegram</button>
 </div>
 
-<!-- Register Popup -->
-<div class="popup" id="registerPopup">
-<div class="popup-content">
-<h3>Register</h3>
-<input type="text" id="name" placeholder="Full Name">
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<input type="password" id="confirmPassword" placeholder="Confirm Password">
-<input type="text" id="inviteCode" placeholder="Invitation Code">
-<button onclick="registerUser()">Register</button>
-<button onclick="closePopup()">Close</button>
-</div>
 </div>
 
-<!-- Login Popup -->
-<div class="popup" id="loginPopup">
-<div class="popup-content">
-<h3>Login</h3>
-<input type="email" id="loginEmail" placeholder="Email">
-<input type="password" id="loginPassword" placeholder="Password">
-<button onclick="loginUser()">Login</button>
-<button onclick="closePopup()">Close</button>
-</div>
-</div>
-
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-<button>Home</button>
-<button>Team</button>
-<button>Task</button>
-<button>Withdraw</button>
-</div>
-
-
-<!-- FIREBASE SDK -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
 
-/* 🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO */
+/* 🔥 YAHAN FIREBASE CONFIG PASTE KARO */
 const firebaseConfig = {
-  apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
-  authDomain: "rrp-earn-app.firebaseapp.com",
-  projectId: "rrp-earn-app",
-  storageBucket: "rrp-earn-app.firebasestorage.app",
-  messagingSenderId: "808141347086",
-  appId: "1:808141347086:web:909793490facec38aadf5f",
-  measurementId: "G-J6X9KHPXJQ"
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE",
+  projectId: "PASTE_HERE",
+  storageBucket: "PASTE_HERE",
+  messagingSenderId: "PASTE_HERE",
+  appId: "PASTE_HERE"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-function openRegister(){
-document.getElementById("registerPopup").style.display="flex";
-}
-
-function openLogin(){
-document.getElementById("loginPopup").style.display="flex";
-}
-
-function closePopup(){
-document.getElementById("registerPopup").style.display="none";
-document.getElementById("loginPopup").style.display="none";
-}
-
-function registerUser(){
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
-let password=document.getElementById("password").value;
-let confirmPassword=document.getElementById("confirmPassword").value;
-let invite=document.getElementById("inviteCode").value;
-
-if(password!==confirmPassword){
-alert("Passwords do not match");
-return;
-}
-
-auth.createUserWithEmailAndPassword(email,password)
-.then((userCredential)=>{
-let user=userCredential.user;
-
-db.collection("users").doc(user.uid).set({
-name:name,
-email:email,
-wallet:0,
-inviteCode:invite,
-createdAt:new Date()
-});
-
-alert("Registration Successful!");
-closePopup();
-})
-.catch((error)=>{
-alert(error.message);
-});
-}
-
-function loginUser(){
-let email=document.getElementById("loginEmail").value;
-let password=document.getElementById("loginPassword").value;
-
-auth.signInWithEmailAndPassword(email,password)
-.then(()=>{
-alert("Login Successful!");
-closePopup();
-})
-.catch((error)=>{
-alert(error.message);
-});
-}
 
 auth.onAuthStateChanged((user)=>{
 if(user){
@@ -288,10 +78,18 @@ document.getElementById("wallet").innerText=doc.data().wallet;
 }
 });
 }else{
-document.getElementById("username").innerText="Guest User";
-document.getElementById("wallet").innerText="0";
+window.location.href="login.html";
 }
 });
+
+function logout(){
+auth.signOut();
+window.location.href="login.html";
+}
+
+function joinTelegram(){
+window.open("https://t.me/rrp_major","_blank");
+}
 
 </script>
 
