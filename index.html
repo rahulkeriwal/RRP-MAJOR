@@ -1,188 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 <title>RRP Earn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#f2f2f2;
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
 }
 
-/* LOGIN PAGE */
-#loginPage{
-    width:100%;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#f2f2f2;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:rgba(0,0,0,0.3);
+}
+.header button{
+padding:8px 14px;
+border:none;
+border-radius:6px;
+background:#ff9800;
+color:white;
+font-weight:bold;
+cursor:pointer;
 }
 
-.login-box{
-    width:90%;
-    max-width:350px;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+/* SLIDING NOTICE */
+.notice-wrapper{
+background:#ff9800;
+overflow:hidden;
+white-space:nowrap;
 }
-
-.login-box h2{
-    text-align:center;
+.notice-text{
+display:inline-block;
+padding:8px 0;
+font-weight:bold;
+animation:slide 12s linear infinite;
 }
-
-.login-box input{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-
-.login-box button{
-    width:100%;
-    padding:10px;
-    background:#28a745;
-    color:#fff;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.toggle{
-    text-align:center;
-    margin-top:10px;
-    color:blue;
-    cursor:pointer;
-}
-
-/* HOME PAGE */
-#homePage{
-    display:none;
-}
-
-.notice{
-    background:red;
-    color:#fff;
-    padding:8px;
-    white-space:nowrap;
-    overflow:hidden;
-}
-
-.notice span{
-    display:inline-block;
-    padding-left:100%;
-    animation:slide 10s linear infinite;
-}
-
 @keyframes slide{
-    from{transform:translateX(0);}
-    to{transform:translateX(-100%);}
+from{transform:translateX(100%);}
+to{transform:translateX(-100%);}
 }
 
+/* HOME */
+.home-section{
+padding:20px;
+text-align:center;
+padding-bottom:80px;
+}
+
+/* 4 BOXES */
+.top-section{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-top:20px;
+}
+.box{
+flex:1;
+height:90px;
+background:white;
+border-radius:15px;
+color:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+font-weight:bold;
+font-size:11px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+.box img{
+width:30px;
+margin-bottom:5px;
+}
+
+/* PROFILE */
 .profile{
-    text-align:center;
-    padding:15px;
+margin-top:25px;
+text-align:center;
+display:none;
 }
-
 .profile img{
-    width:80px;
-    height:80px;
-    border-radius:50%;
+width:100px;
+height:100px;
+border-radius:50%;
+border:4px solid white;
+}
+.wallet-box{
+margin-top:15px;
+background:rgba(255,255,255,0.2);
+padding:15px;
+border-radius:15px;
 }
 
-.wallet{
-    font-weight:bold;
-    margin-top:5px;
+/* AUTH */
+.auth-page{
+display:none;
+padding:40px 20px;
+text-align:center;
+}
+.auth-page input{
+width:90%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+outline:none;
+}
+.auth-page button{
+padding:12px;
+width:95%;
+background:#ff9800;
+border:none;
+border-radius:8px;
+color:white;
+font-weight:bold;
+cursor:pointer;
 }
 
-/* FUNCTIONS */
-.functions{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    padding:10px;
+/* NAV */
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:none;
+justify-content:space-around;
+padding:12px 0;
+box-shadow:0 -2px 10px rgba(0,0,0,0.2);
 }
-
-.functions div{
-    background:#fff;
-    padding:10px;
-    text-align:center;
-    border-radius:8px;
-    box-shadow:0 1px 5px rgba(0,0,0,0.1);
-    font-size:13px;
+.bottom-nav button{
+background:none;
+border:none;
+font-weight:bold;
+color:#333;
 }
 
 /* LIVE WITHDRAW */
 .live-box{
-    width:95%;
-    max-width:400px;
-    margin:10px auto;
-    background:#fff;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-    overflow:hidden;
+width:95%;
+max-width:400px;
+margin:10px auto;
+background:#fff;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+overflow:hidden;
 }
 
 .live-title{
-    background:#28a745;
-    color:#fff;
-    padding:8px;
-    text-align:center;
-    font-weight:bold;
+background:#28a745;
+color:#fff;
+padding:8px;
+text-align:center;
+font-weight:bold;
 }
 
 .live-list{
-    height:120px;
-    overflow:hidden;
-    padding:10px;
+height:120px;
+overflow:hidden;
+padding:10px;
 }
 
 .live-item{
-    padding:5px 0;
-    font-size:14px;
-    color:#333;
+padding:5px 0;
+font-size:14px;
+color:#333;
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
-<div id="loginPage">
-<div class="login-box">
-<h2 id="formTitle">Login</h2>
-
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<button onclick="login()">Login</button>
-
-<div class="toggle" onclick="toggleForm()">Don't have account? Register</div>
+<div class="header">
+<h3>RRP Earn</h3>
+<div id="authButtons">
+<button onclick="showLogin()">Login</button>
+<button onclick="showRegister()">Register</button>
+</div>
+<div id="logoutBtn" style="display:none;">
+<button onclick="logout()">Logout</button>
 </div>
 </div>
 
-<!-- HOME PAGE -->
-<div id="homePage">
-
-<div class="notice">
-<span>🔥 Welcome to RRP Earn | Daily Withdraw Active | Fast Payment ₹50-₹450 🔥</span>
+<!-- SLIDING NOTICE -->
+<div class="notice-wrapper">
+<div class="notice-text">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
 </div>
 
-<div class="profile">
-<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-<div id="welcomeText">Welcome</div>
-<div class="wallet">Wallet Balance: ₹<span id="balance">0</span></div>
+<!-- HOME -->
+<div class="home-section" id="homePage">
+
+<!-- 4 FUNCTIONS -->
+<div class="top-section">
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+Telegram
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+WhatsApp
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
+Chat Us
+</a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+YouTube
+</a>
 </div>
 
-<div class="functions">
-<div>📢 Telegram</div>
-<div>💬 WhatsApp</div>
-<div>👥 Refer</div>
-<div>💰 Withdraw</div>
+<!-- PROFILE -->
+<div class="profile" id="profileSection">
+<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+<h2 id="dispName">Welcome</h2>
+<div class="wallet-box">
+<h3>Wallet Balance</h3>
+<h1>₹ <span id="dispWallet">0</span></h1>
+</div>
 </div>
 
+<!-- LIVE WITHDRAW -->
 <div class="live-box">
 <div class="live-title">🔥 Live Withdraw</div>
 <div class="live-list" id="liveWithdraw"></div>
@@ -190,61 +235,154 @@ body{
 
 </div>
 
+<!-- LOGIN -->
+<div class="auth-page" id="loginPage">
+<h2>Login</h2>
+<input type="email" id="lEmail" placeholder="Email">
+<input type="password" id="lPass" placeholder="Password">
+<button onclick="loginUser()">Login</button>
+<button style="background:#555;margin-top:10px;" onclick="goHome()">Back</button>
+</div>
+
+<!-- REGISTER -->
+<div class="auth-page" id="registerPage">
+<h2>Register</h2>
+<input type="text" id="rName" placeholder="Full Name">
+<input type="email" id="rEmail" placeholder="Email">
+<input type="password" id="rPass" placeholder="Password">
+<input type="password" id="rCPass" placeholder="Confirm Password">
+<button onclick="registerUser()">Register Now</button>
+<button style="background:#555;margin-top:10px;" onclick="goHome()">Back</button>
+</div>
+
+<div class="bottom-nav" id="bottomNav">
+<button onclick="goHome()">Home</button>
+<button>Team</button>
+<button>Task</button>
+<button>Withdraw</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 <script>
-let isRegister=false;
+const firebaseConfig = {
 
-function toggleForm(){
-    isRegister=!isRegister;
-    document.getElementById("formTitle").innerText=isRegister?"Register":"Login";
-    document.querySelector("button").innerText=isRegister?"Register":"Login";
-    document.querySelector(".toggle").innerText=isRegister?
-    "Already have account? Login":
-    "Don't have account? Register";
+  apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
+
+  authDomain: "rrp-earn-app.firebaseapp.com",
+
+  projectId: "rrp-earn-app",
+
+  storageBucket: "rrp-earn-app.firebasestorage.app",
+
+  messagingSenderId: "808141347086",
+
+  appId: "1:808141347086:web:909793490facec38aadf5f",
+
+ measurementId: "G-J6X9KHPXJQ"
+
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+/* UI Navigation */
+function showLogin(){ 
+homePage.style.display="none"; 
+registerPage.style.display="none"; 
+loginPage.style.display="block"; 
+}
+function showRegister(){ 
+homePage.style.display="none"; 
+loginPage.style.display="none"; 
+registerPage.style.display="block"; 
+}
+function goHome(){ 
+homePage.style.display="block"; 
+loginPage.style.display="none"; 
+registerPage.style.display="none"; 
 }
 
-function login(){
-    const email=document.getElementById("email").value;
-    const pass=document.getElementById("password").value;
+/* Register */
+function registerUser(){
+const name=rName.value.trim();
+const email=rEmail.value.trim();
+const pass=rPass.value.trim();
+const cPass=rCPass.value.trim();
+if(pass!==cPass){alert("Password not match!");return;}
+if(!name||!email||!pass){alert("Fill all fields!");return;}
 
-    if(email==""||pass==""){
-        alert("Fill all fields");
-        return;
-    }
-
-    localStorage.setItem("user",email);
-    openHome();
+auth.createUserWithEmailAndPassword(email,pass)
+.then(cred=>{
+return db.collection("users").doc(cred.user.uid).set({
+name:name,
+wallet:130
+});
+});
 }
 
-function openHome(){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("homePage").style.display="block";
-    document.getElementById("welcomeText").innerText="Welcome "+localStorage.getItem("user");
+/* Login */
+function loginUser(){
+const email=lEmail.value.trim();
+const pass=lPass.value.trim();
+auth.signInWithEmailAndPassword(email,pass)
+.catch(err=>alert(err.message));
 }
 
-if(localStorage.getItem("user")){
-    openHome();
+/* Logout */
+function logout(){
+auth.signOut();
 }
 
-/* LIVE WITHDRAW SCRIPT */
-const names=["Rahul","Aman","Vikash","Rohit","Sanjay","Neha","Pooja","Ankit","Riya","Kunal","Arjun","Priya"];
-const liveBox=document.getElementById("liveWithdraw");
+/* Auth State */
+auth.onAuthStateChanged(user=>{
+if(user){
+loginPage.style.display="none";
+registerPage.style.display="none";
+homePage.style.display="block";
 
-function randomWithdraw(){
-    const name=names[Math.floor(Math.random()*names.length)];
-    const amount=Math.floor(Math.random()*(450-50+1))+50;
+profileSection.style.display="block";
+bottomNav.style.display="flex";
+authButtons.style.display="none";
+logoutBtn.style.display="block";
 
-    const div=document.createElement("div");
-    div.className="live-item";
-    div.innerHTML="✅ "+name+" withdrew ₹"+amount;
-
-    liveBox.prepend(div);
-
-    if(liveBox.children.length>8){
-        liveBox.removeChild(liveBox.lastChild);
-    }
+db.collection("users").doc(user.uid).onSnapshot(doc=>{
+if(doc.exists){
+dispName.innerText="Welcome, "+doc.data().name;
+dispWallet.innerText=doc.data().wallet;
 }
+});
+}else{
+profileSection.style.display="none";
+bottomNav.style.display="none";
+authButtons.style.display="block";
+logoutBtn.style.display="none";
+}
+});
 
-setInterval(randomWithdraw,1200);
+/* LIVE WITHDRAW */
+const names=["Rahul","Amit","Suman","Rohit","Pooja","Vikas","Neha","Arjun"];
+const list=document.getElementById("liveWithdraw");
+
+function addItem(){
+let div=document.createElement("div");
+div.className="live-item";
+div.innerText="💸 "+names[Math.floor(Math.random()*names.length)]+" Withdrew ₹"+(Math.floor(Math.random()*400)+50);
+return div;
+}
+for(let i=0;i<10;i++){list.appendChild(addItem());}
+
+list.innerHTML+=list.innerHTML;
+let pos=0;
+function scroll(){
+pos+=0.7;
+list.style.transform=`translateY(-${pos}px)`;
+if(pos>=list.scrollHeight/2) pos=0;
+requestAnimationFrame(scroll);
+}
+scroll();
 </script>
 
 </body>
