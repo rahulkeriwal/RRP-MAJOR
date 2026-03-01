@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Earn Website</title>
+<title>RRP Earn</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -11,7 +11,7 @@ body{
     background:#f2f2f2;
 }
 
-/* Notice Slider */
+/* Notice */
 .notice{
     background:#ff9800;
     color:white;
@@ -19,11 +19,10 @@ body{
     font-weight:bold;
 }
 
-/* Top Buttons Section */
+/* Top Boxes */
 .top-section{
     display:flex;
     justify-content:center;
-    align-items:center;
     gap:20px;
     padding:20px 10px;
     flex-wrap:wrap;
@@ -53,7 +52,7 @@ body{
     margin-bottom:8px;
 }
 
-/* User Profile */
+/* Profile */
 .profile{
     text-align:center;
     margin-top:20px;
@@ -64,11 +63,19 @@ body{
     border-radius:50%;
 }
 
-.profile h3{
-    margin:10px 0 5px;
+/* Auth Section */
+.auth{
+    text-align:center;
+    margin-top:20px;
 }
 
-/* Bottom Navigation */
+.auth input{
+    width:80%;
+    padding:8px;
+    margin:5px;
+}
+
+/* Bottom Nav */
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -85,51 +92,152 @@ body{
     border:none;
     font-size:14px;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- Notice Sliding -->
+<!-- Notice -->
 <div class="notice">
 <marquee>🔥 Join Telegram & Earn 130₹ Instantly | Refer & Earn More 🔥</marquee>
 </div>
 
-<!-- 3 Boxes -->
+<!-- Top Buttons -->
 <div class="top-section">
 
-    <a href="https://t.me/rrp_major" class="box">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
-        Telegram
-    </a>
+<a href="https://t.me/rrp_major" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+Telegram
+</a>
 
-    <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        WhatsApp
-    </a>
+<a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+WhatsApp
+</a>
 
-    <a href="#" class="box">
-        <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
-        Chat Us
-    </a>
+<a href="#" class="box">
+<img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
+Chat Us
+</a>
 
 </div>
 
 <!-- Profile -->
 <div class="profile">
-    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-    <h3>User Name</h3>
-    <p>Wallet Balance: ₹0</p>
+<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+<h3 id="username">Guest User</h3>
+<p>Wallet Balance: ₹<span id="wallet">0</span></p>
+</div>
+
+<!-- Login / Register -->
+<div class="auth">
+<h2>Login / Register</h2>
+<input type="email" id="email" placeholder="Enter Email"><br>
+<input type="password" id="password" placeholder="Enter Password"><br>
+<button onclick="registerUser()">Register</button>
+<button onclick="loginUser()">Login</button>
+<button onclick="logoutUser()">Logout</button>
 </div>
 
 <!-- Bottom Navigation -->
 <div class="bottom-nav">
-    <button>Home</button>
-    <button>Team</button>
-    <button>Task</button>
-    <button>Withdraw</button>
+<button>Home</button>
+<button>Team</button>
+<button>Task</button>
+<button>Withdraw</button>
 </div>
+
+
+<!-- ================= FIREBASE SDK ================= -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+
+/* =========================
+   🔥 YAHAN APNA FIREBASE CONFIG PASTE KARO
+   Firebase Console → Project Settings → Web App → firebaseConfig
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
+  authDomain: "rrp-earn-app.firebaseapp.com",
+  projectId: "rrp-earn-app",
+  storageBucket: "rrp-earn-app.firebasestorage.app",
+  messagingSenderId: "808141347086",
+  appId: "1:808141347086:web:909793490facec38aadf5f",
+  measurementId: "G-J6X9KHPXJQ"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+
+// ================= REGISTER =================
+function registerUser(){
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+auth.createUserWithEmailAndPassword(email,password)
+.then((userCredential)=>{
+let user = userCredential.user;
+
+db.collection("users").doc(user.uid).set({
+email: email,
+wallet: 0,
+createdAt: new Date()
+});
+
+alert("Registration Successful!");
+})
+.catch((error)=>{
+alert(error.message);
+});
+}
+
+
+// ================= LOGIN =================
+function loginUser(){
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+auth.signInWithEmailAndPassword(email,password)
+.then((userCredential)=>{
+alert("Login Successful!");
+})
+.catch((error)=>{
+alert(error.message);
+});
+}
+
+
+// ================= LOGOUT =================
+function logoutUser(){
+auth.signOut();
+alert("Logged Out!");
+}
+
+
+// ================= AUTO USER DATA SHOW =================
+auth.onAuthStateChanged((user)=>{
+if(user){
+document.getElementById("username").innerText = user.email;
+
+db.collection("users").doc(user.uid).get().then((doc)=>{
+if(doc.exists){
+document.getElementById("wallet").innerText = doc.data().wallet;
+}
+});
+}else{
+document.getElementById("username").innerText = "Guest User";
+document.getElementById("wallet").innerText = "0";
+}
+});
+
+</script>
 
 </body>
 </html>
