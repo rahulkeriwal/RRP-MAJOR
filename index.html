@@ -7,104 +7,102 @@
     <style>
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f2027;
             color: white;
-            min-height: 100vh;
+            text-align: center;
         }
 
         /* Header */
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 15px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
         }
 
         .header button {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
             background: #ff9800;
             color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Banner */
+        .top-banner img {
+            width: 90%;
+            border-radius: 15px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Notice */
+        .notice {
+            background: #ff9800;
+            padding: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Profile Section */
+        #profileSection {
+            background: rgba(255,255,255,0.1);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        /* Forms */
+        .auth-page {
+            display: none;
+            padding: 20px;
+        }
+
+        input {
+            width: 85%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .btn-main {
+            width: 90%;
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        /* TOP BANNER - UPDATED IMAGE */
-        .top-banner {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .top-banner img {
-            max-width: 90%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-
-        .notice {
-            background: #ff9800;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-        /* Home Section */
-        .home-section { padding: 20px; text-align: center; padding-bottom: 80px; }
-        .top-section { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
-        .box {
-            flex: 1; height: 90px; background: white; border-radius: 15px; color: black;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-decoration: none; font-weight: bold; font-size: 11px;
-        }
-        .box img { width: 30px; margin-bottom: 5px; }
-
-        /* Profile Area */
-        .profile {
-            margin-top: 20px; background: rgba(255, 255, 255, 0.1);
-            padding: 20px; border-radius: 15px; display: none;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Auth Pages */
-        .auth-page { display: none; padding: 40px 20px; text-align: center; }
-        .auth-page input {
-            width: 90%; padding: 12px; margin: 10px 0;
-            border-radius: 8px; border: none; font-size: 16px;
-        }
-        .auth-page button {
-            padding: 12px; width: 95%; background: #ff9800;
-            border: none; border-radius: 8px; color: white;
-            font-weight: bold; cursor: pointer; font-size: 16px;
-        }
-
-        /* Navigation */
+        /* Bottom Nav */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%;
-            background: white; display: none;
-            justify-content: space-around; padding: 12px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: none;
+            justify-content: space-around;
+            padding: 10px 0;
         }
-        .bottom-nav button { background: none; border: none; font-weight: bold; color: #333; }
+        
+        .bottom-nav button { color: #333; font-weight: bold; border: none; background: none; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <h3>RRP Earn</h3>
-    <div id="authButtons">
-        <button onclick="showLogin()">Login</button>
-        <button onclick="showRegister()">Register</button>
+    <div id="authMenu">
+        <button onclick="showPage('loginPage')">Login</button>
+        <button onclick="showPage('registerPage')">Register</button>
     </div>
-    <div id="logoutBtn" style="display:none;">
-        <button onclick="logout()">Logout</button>
-    </div>
+    <button id="logoutBtn" style="display:none;" onclick="logout()">Logout</button>
 </div>
 
 <div class="top-banner">
@@ -113,41 +111,33 @@
 
 <div class="notice">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
 
-<div class="home-section" id="homePage">
-    <div class="top-section">
-        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram</a>
-        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp</a>
-        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">Chat Us</a>
-        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube</a>
+<div id="homePage">
+    <div id="profileSection">
+        <h2 id="userName">User</h2>
+        <h1>₹ <span id="userWallet">0</span></h1>
     </div>
-
-    <div class="profile" id="profileSection">
-        <h2 id="dispName">Welcome</h2>
-        <h1>₹ <span id="dispWallet">0</span></h1>
-    </div>
+    <p>Please Login to see your tasks.</p>
 </div>
 
-<div class="auth-page" id="loginPage">
+<div id="loginPage" class="auth-page">
     <h2>Login</h2>
-    <input type="email" id="lEmail" placeholder="Email Address">
+    <input type="email" id="lEmail" placeholder="Email">
     <input type="password" id="lPass" placeholder="Password">
-    <button id="loginBtn" onclick="loginUser()">Login</button>
-    <button style="background:#444; margin-top:10px;" onclick="goHome()">Back</button>
+    <button class="btn-main" onclick="login()">Login</button>
+    <p onclick="showPage('homePage')">Back</p>
 </div>
 
-<div class="auth-page" id="registerPage">
+<div id="registerPage" class="auth-page">
     <h2>Register</h2>
     <input type="text" id="rName" placeholder="Full Name">
-    <input type="email" id="rEmail" placeholder="Email Address">
+    <input type="email" id="rEmail" placeholder="Email">
     <input type="password" id="rPass" placeholder="Password">
-    <input type="password" id="rCPass" placeholder="Confirm Password">
-    <button id="regBtn" onclick="registerUser()">Register Now</button>
-    <button style="background:#444; margin-top:10px;" onclick="goHome()">Back</button>
+    <button class="btn-main" onclick="register()">Register Now</button>
+    <p onclick="showPage('homePage')">Back</p>
 </div>
 
 <div class="bottom-nav" id="bottomNav">
-    <button onclick="goHome()">Home</button>
-    <button>Team</button>
+    <button onclick="showPage('homePage')">Home</button>
     <button>Task</button>
     <button>Withdraw</button>
 </div>
@@ -157,113 +147,68 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// PASTE YOUR CONFIG HERE
+// APNA CONFIG YAHA DALEIN
 const firebaseConfig = {
-
-  apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
-
-  authDomain: "rrp-earn-app.firebaseapp.com",
-
-  projectId: "rrp-earn-app",
-
-  storageBucket: "rrp-earn-app.firebasestorage.app",
-
-  messagingSenderId: "808141347086",
-
-  appId: "1:808141347086:web:909793490facec38aadf5f",
-
-  measurementId: "G-J6X9KHPXJQ"
-
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-function showLogin(){ 
-    document.getElementById("homePage").style.display="none"; 
-    document.getElementById("registerPage").style.display="none"; 
-    document.getElementById("loginPage").style.display="block"; 
-}
-function showRegister(){ 
-    document.getElementById("homePage").style.display="none"; 
-    document.getElementById("loginPage").style.display="none"; 
-    document.getElementById("registerPage").style.display="block"; 
-}
-function goHome(){ 
-    document.getElementById("homePage").style.display="block"; 
-    document.getElementById("loginPage").style.display="none"; 
-    document.getElementById("registerPage").style.display="none"; 
+function showPage(id) {
+    document.getElementById('homePage').style.display = id === 'homePage' ? 'block' : 'none';
+    document.getElementById('loginPage').style.display = id === 'loginPage' ? 'block' : 'none';
+    document.getElementById('registerPage').style.display = id === 'registerPage' ? 'block' : 'none';
 }
 
-// LOGIN FUNCTION FIX
-function loginUser(){
-    const email = document.getElementById("lEmail").value.trim();
-    const pass = document.getElementById("lPass").value;
-    const btn = document.getElementById("loginBtn");
+function register() {
+    const name = document.getElementById('rName').value;
+    const email = document.getElementById('rEmail').value;
+    const pass = document.getElementById('rPass').value;
 
-    if(!email || !pass){ alert("Please enter email and password"); return; }
-
-    btn.disabled = true;
-    btn.innerText = "Logging in...";
-
-    auth.signInWithEmailAndPassword(email, pass)
-    .then(() => {
-        alert("Login Successful!");
-        goHome();
-    })
-    .catch(err => {
-        alert("Login Error: " + err.message);
-        btn.disabled = false;
-        btn.innerText = "Login";
-    });
-}
-
-// REGISTER FUNCTION
-function registerUser(){
-    const name = document.getElementById("rName").value.trim();
-    const email = document.getElementById("rEmail").value.trim();
-    const pass = document.getElementById("rPass").value;
-    const cPass = document.getElementById("rCPass").value;
-    const btn = document.getElementById("regBtn");
-
-    if(pass !== cPass){ alert("Passwords do not match!"); return; }
-    if(!name || !email || !pass){ alert("Fill all details!"); return; }
-
-    btn.disabled = true;
     auth.createUserWithEmailAndPassword(email, pass)
-    .then(cred => {
-        return db.collection("users").doc(cred.user.uid).set({
+    .then(userCredential => {
+        return db.collection("users").doc(userCredential.user.uid).set({
             name: name,
-            email: email,
-            wallet: 130,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            wallet: 130
         });
     })
-    .then(() => {
-        alert("Account Created!");
-        goHome();
-    })
-    .catch(err => {
-        alert(err.message);
-        btn.disabled = false;
-    });
+    .then(() => { alert("Success!"); showPage('homePage'); })
+    .catch(err => alert(err.message));
 }
 
-function logout(){ auth.signOut().then(() => location.reload()); }
+function login() {
+    const email = document.getElementById('lEmail').value.trim();
+    const pass = document.getElementById('lPass').value;
 
-// AUTH MONITOR
+    // Direct Firebase sign-in
+    auth.signInWithEmailAndPassword(email, pass)
+    .then(() => {
+        alert("Logged In!");
+        showPage('homePage');
+    })
+    .catch(err => alert("Login Error: " + err.message));
+}
+
+function logout() { auth.signOut().then(() => location.reload()); }
+
 auth.onAuthStateChanged(user => {
-    if(user){
-        document.getElementById("profileSection").style.display = "block";
-        document.getElementById("bottomNav").style.display = "flex";
-        document.getElementById("authButtons").style.display = "none";
-        document.getElementById("logoutBtn").style.display = "block";
-
+    if(user) {
+        document.getElementById('profileSection').style.display = 'block';
+        document.getElementById('bottomNav').style.display = 'flex';
+        document.getElementById('authMenu').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'block';
+        
         db.collection("users").doc(user.uid).onSnapshot(doc => {
-            if(doc.exists){
-                document.getElementById("dispName").innerText = "Hi, " + doc.data().name;
-                document.getElementById("dispWallet").innerText = doc.data().wallet;
+            if(doc.exists) {
+                document.getElementById('userName').innerText = "Hi, " + doc.data().name;
+                document.getElementById('userWallet').innerText = doc.data().wallet;
             }
         });
     }
