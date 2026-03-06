@@ -9,9 +9,10 @@
 <style>
 body{
 margin:0;
-font-family:Segoe UI;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 background:linear-gradient(135deg,#1e3c72,#2a5298);
 color:white;
+min-height: 100vh;
 }
 
 /* HEADER */
@@ -53,7 +54,7 @@ to{ transform:translateX(-100%);}
 .home-section{
 padding:20px;
 text-align:center;
-padding-bottom:80px;
+padding-bottom:100px;
 }
 
 /* 4 BOXES */
@@ -102,7 +103,7 @@ padding:15px;
 border-radius:15px;
 }
 
-/* AUTH */
+/* AUTH PAGES */
 .auth-page{
 display:none;
 padding:40px 20px;
@@ -125,24 +126,47 @@ border-radius:8px;
 color:white;
 font-weight:bold;
 cursor:pointer;
+margin-top: 10px;
+}
+.forgot-link {
+display: block;
+margin-top: 15px;
+color: #ff9800;
+font-weight: bold;
+text-decoration: none;
+cursor: pointer;
 }
 
-/* NAV */
-.bottom-nav{
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:none;
-justify-content:space-around;
-padding:12px 0;
-box-shadow:0 -2px 10px rgba(0,0,0,0.2);
+/* BOTTOM NAVIGATION */
+.bottom-nav {
+position: fixed;
+bottom: 0;
+width: 100%;
+background: #ffffff;
+display: none; 
+justify-content: space-around;
+padding: 10px 0;
+box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+border-radius: 15px 15px 0 0;
+z-index: 1000;
 }
-.bottom-nav button{
-background:none;
-border:none;
-font-weight:bold;
-color:#333;
+.nav-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+background: none;
+border: none;
+color: #555;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: 0.3s;
+flex: 1;
+}
+.nav-item i {
+font-size: 20px;
+margin-bottom: 4px;
+color: #f39c12;
 }
 </style>
 </head>
@@ -159,126 +183,75 @@ color:#333;
 </div>
 </div>
 
-<!-- SLIDING NOTICE -->
 <div class="notice-wrapper">
-<div class="notice-text">🔥 Join Telegram & Earn 130₹ Instantly 🔥</div>
+<div class="notice-text">🔥 Join Telegram & Earn 130₹ Instantly 🔥 Bonus available for new users! 🔥</div>
 </div>
 
-<!-- HOME -->
 <div class="home-section" id="homePage">
+    <div class="top-section">
+        <a href="https://t.me/rrp_major" class="box" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp
+        </a>
+        <a href="#" class="box">
+            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">Chat Us
+        </a>
+        <a href="https://youtube.com/@animationn-story" class="box" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube
+        </a>
+    </div>
 
-<!-- 4 FUNCTIONS -->
-<div class="top-section">
-    <a href="https://t.me/rrp_major" class="box" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
-        Telegram
-    </a>
-    <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        WhatsApp
-    </a>
-    <a href="https://yourchatlink.com" class="box" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">
-        Chat Us
-    </a>
-    <a href="https://youtube.com/@animationn-story" class="box" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-        YouTube
-    </a>
+    <div class="profile" id="profileSection">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        <h2 id="dispName">Welcome</h2>
+        <div class="wallet-box">
+            <h3>Wallet Balance</h3>
+            <h1>₹ <span id="dispWallet">0</span></h1>
+        </div>
+    </div>
 </div>
 
-<!-- PROFILE -->
-<div class="profile" id="profileSection">
-<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-<h2 id="dispName">Welcome</h2>
-<div class="wallet-box">
-<h3>Wallet Balance</h3>
-<h1>₹ <span id="dispWallet">0</span></h1>
-</div>
-</div>
-
-</div>
-
-<!-- LOGIN -->
 <div class="auth-page" id="loginPage">
-<h2>Login</h2>
-<input type="email" id="lEmail" placeholder="Email">
-<input type="password" id="lPass" placeholder="Password">
-<button onclick="loginUser()">Login</button>
-<button style="background:#555;margin-top:10px;" onclick="goHome()">Back</button>
+    <h2>Login</h2>
+    <input type="email" id="lEmail" placeholder="Email Address">
+    <input type="password" id="lPass" placeholder="Password">
+    <button onclick="loginUser()">Login</button>
+    <a class="forgot-link" onclick="showForgot()">Forgot Password?</a>
+    <button style="background:#555;" onclick="goHome()">Back</button>
 </div>
 
-<!-- REGISTER -->
 <div class="auth-page" id="registerPage">
-<h2>Register</h2>
-<input type="text" id="rName" placeholder="Full Name">
-<input type="email" id="rEmail" placeholder="Email">
-<input type="password" id="rPass" placeholder="Password">
-<input type="password" id="rCPass" placeholder="Confirm Password">
-<button onclick="registerUser()">Register Now</button>
-<button style="background:#555;margin-top:10px;" onclick="goHome()">Back</button>
+    <h2>Register</h2>
+    <input type="text" id="rName" placeholder="Full Name">
+    <input type="email" id="rEmail" placeholder="Email Address">
+    <input type="password" id="rPass" placeholder="Password">
+    <input type="password" id="rCPass" placeholder="Confirm Password">
+    <button onclick="registerUser()">Register Now</button>
+    <button style="background:#555;" onclick="goHome()">Back</button>
 </div>
 
-<!-- BOTTOM NAVIGATION -->
-<style>
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: #ffffff;
-        display: none; /* Login ke baad flex ho jayega */
-        justify-content: space-around;
-        padding: 10px 0;
-        box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
-        border-radius: 15px 15px 0 0;
-        z-index: 1000;
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background: none;
-        border: none;
-        color: #555;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.3s;
-        flex: 1;
-    }
-
-    .nav-item i {
-        font-size: 20px;
-        margin-bottom: 4px;
-        color: #f39c12; /* Icon color theme se match karega */
-    }
-
-    .nav-item:active {
-        transform: scale(0.9);
-        color: #f39c12;
-    }
-</style>
+<div class="auth-page" id="forgotPage">
+    <h2>Reset Password</h2>
+    <p>Enter your email to receive a reset link.</p>
+    <input type="email" id="fEmail" placeholder="Registered Email">
+    <button onclick="resetPassword()">Send Reset Link</button>
+    <button style="background:#555;" onclick="showLogin()">Back to Login</button>
+</div>
 
 <div class="bottom-nav" id="bottomNav">
-    <button class="nav-item" onclick="showPage('homePage')">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
+    <button class="nav-item" onclick="goHome()">
+        <i class="fa-solid fa-house"></i><span>Home</span>
     </button>
-    
     <button class="nav-item">
-        <i class="fa-solid fa-users"></i>
-        <span>Team</span>
+        <i class="fa-solid fa-users"></i><span>Team</span>
     </button>
-    
     <button class="nav-item">
-        <i class="fa-solid fa-list-check"></i>
-        <span>Task</span>
+        <i class="fa-solid fa-list-check"></i><span>Task</span>
     </button>
-    
     <button class="nav-item">
-        <i class="fa-solid fa-wallet"></i>
-        <span>Withdraw</span>
+        <i class="fa-solid fa-wallet"></i><span>Withdraw</span>
     </button>
 </div>
 
@@ -287,105 +260,109 @@ color:#333;
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-
-// 🔴 APNA FIREBASE CONFIG YAHA PASTE KARO
+// FIREBASE CONFIG
 const firebaseConfig = {
-
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
-
   authDomain: "rrp-earn-app.firebaseapp.com",
-
   projectId: "rrp-earn-app",
-
   storageBucket: "rrp-earn-app.firebasestorage.app",
-
   messagingSenderId: "808141347086",
-
   appId: "1:808141347086:web:909793490facec38aadf5f",
-
- measurementId: "G-J6X9KHPXJQ"
-
+  measurementId: "G-J6X9KHPXJQ"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-/* Navigation */
-function showLogin(){
-homePage.style.display="none";
-registerPage.style.display="none";
-loginPage.style.display="block";
-}
-function showRegister(){
-homePage.style.display="none";
-loginPage.style.display="none";
-registerPage.style.display="block";
-}
-function goHome(){
-homePage.style.display="block";
-loginPage.style.display="none";
-registerPage.style.display="none";
+// UI Elements
+const pages = ['homePage', 'loginPage', 'registerPage', 'forgotPage'];
+
+/* Navigation Logic */
+function hideAllPages() {
+    pages.forEach(p => document.getElementById(p).style.display = "none");
 }
 
-/* Register */
+function showLogin() { hideAllPages(); loginPage.style.display = "block"; }
+function showRegister() { hideAllPages(); registerPage.style.display = "block"; }
+function showForgot() { hideAllPages(); forgotPage.style.display = "block"; }
+function goHome() { hideAllPages(); homePage.style.display = "block"; }
+
+/* Register Logic */
 function registerUser(){
-const name=rName.value.trim();
-const email=rEmail.value.trim();
-const pass=rPass.value.trim();
-const cpass=rCPass.value.trim();
+    const name = rName.value.trim();
+    const email = rEmail.value.trim();
+    const pass = rPass.value.trim();
+    const cpass = rCPass.value.trim();
 
-if(!name||!email||!pass){alert("Fill all fields");return;}
-if(pass!==cpass){alert("Password not match");return;}
+    if(!name || !email || !pass){ alert("Please fill all fields"); return; }
+    if(pass !== cpass){ alert("Passwords do not match"); return; }
 
-auth.createUserWithEmailAndPassword(email,pass)
-.then(cred=>{
-return db.collection("users").doc(cred.user.uid).set({
-name:name,
-wallet:130
-});
-});
+    auth.createUserWithEmailAndPassword(email, pass)
+    .then(cred => {
+        return db.collection("users").doc(cred.user.uid).set({
+            name: name,
+            wallet: 130,
+            email: email,
+            createdAt: new Date()
+        });
+    })
+    .catch(err => alert(err.message));
 }
 
-/* Login */
+/* Login Logic */
 function loginUser(){
-const email=lEmail.value.trim();
-const pass=lPass.value.trim();
-auth.signInWithEmailAndPassword(email,pass)
-.catch(()=>alert("Invalid Email or Password"));
+    const email = lEmail.value.trim();
+    const pass = lPass.value.trim();
+    if(!email || !pass) { alert("Enter email and password"); return; }
+    
+    auth.signInWithEmailAndPassword(email, pass)
+    .catch(err => alert("Login Failed: " + err.message));
+}
+
+/* Forgot Password Logic */
+function resetPassword() {
+    const email = fEmail.value.trim();
+    if(!email) { alert("Please enter your registered email"); return; }
+
+    auth.sendPasswordResetEmail(email)
+    .then(() => {
+        alert("Password reset link sent to your email!");
+        showLogin();
+    })
+    .catch(err => alert(err.message));
 }
 
 /* Logout */
 function logout(){
-auth.signOut();
+    auth.signOut();
 }
 
-/* Auth State */
-auth.onAuthStateChanged(user=>{
-if(user){
-loginPage.style.display="none";
-registerPage.style.display="none";
-homePage.style.display="block";
+/* Auth State Listener */
+auth.onAuthStateChanged(user => {
+    if(user){
+        hideAllPages();
+        homePage.style.display = "block";
+        profileSection.style.display = "block";
+        bottomNav.style.display = "flex";
+        authButtons.style.display = "none";
+        logoutBtn.style.display = "block";
 
-profileSection.style.display="block";
-bottomNav.style.display="flex";
-authButtons.style.display="none";
-logoutBtn.style.display="block";
-
-db.collection("users").doc(user.uid).onSnapshot(doc=>{
-if(doc.exists){
-dispName.innerText="Welcome, "+doc.data().name;
-dispWallet.innerText=doc.data().wallet;
-}
+        db.collection("users").doc(user.uid).onSnapshot(doc => {
+            if(doc.exists){
+                dispName.innerText = "Welcome, " + doc.data().name;
+                dispWallet.innerText = doc.data().wallet;
+            }
+        });
+    } else {
+        profileSection.style.display = "none";
+        bottomNav.style.display = "none";
+        authButtons.style.display = "block";
+        logoutBtn.style.display = "none";
+        goHome();
+    }
 });
-}else{
-profileSection.style.display="none";
-bottomNav.style.display="none";
-authButtons.style.display="block";
-logoutBtn.style.display="none";
-}
-});
-
 </script>
+
 </body>
 </html>
