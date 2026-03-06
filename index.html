@@ -41,7 +41,7 @@
         .progress-fill { height: 100%; background: #007bff; }
         .task-info { display: flex; justify-content: space-between; font-size: 9px; color: #eee; margin-bottom: 10px; }
         .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
-        .action-btn.completed { background: #4caf50 !important; color: white !important; cursor: default; }
+        .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; }
 
         /* VIDEO MODAL (POPUP) */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
@@ -50,8 +50,8 @@
         #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; }
         .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
 
-        /* UNMUTE OVERLAY */
-        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 152, 0, 0.9); color: white; padding: 12px 20px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; z-index: 10; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        /* UNMUTE BUTTON STYLE */
+        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
         /* AUTH PAGES */
         .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; font-size: 14px; }
@@ -78,10 +78,10 @@
 
 <div class="page-section" id="homePage">
     <div class="top-section">
-        <a href="https://t.me/rrp_major" class="box" target="_blank">Telegram</a>
-        <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">WhatsApp</a>
-        <a href="#" class="box">Chat Us</a>
-        <a href="https://youtube.com/@animationn-story" class="box" target="_blank">YouTube</a>
+        <a href="https://t.me/rrp_major" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram</a>
+        <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp</a>
+        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">Chat Us</a>
+        <a href="https://youtube.com/@animationn-story" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube</a>
     </div>
     <div class="profile" id="profileSection">
         <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:70px; margin-top:20px;">
@@ -102,13 +102,33 @@
             <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
             <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Resume</button>
         </div>
+
+        <div class="task-card">
+            <div class="reward-tag">+51 INR</div>
+            <div class="task-icon" style="background:#4e7ae1;"><i class="fa-solid fa-star"></i></div>
+            <h4>Subscribe</h4>
+            <p>Subscribe and earn coins</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:40%;"></div></div>
+            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
+            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/YOUR_CHANNEL', 2)">▶ Resume</button>
         </div>
+
+        <div class="task-card" style="grid-column: span 2;">
+            <div class="reward-tag">+51 INR</div>
+            <div class="task-icon" style="background:#d62976;"><i class="fa-brands fa-instagram"></i></div>
+            <h4>Follow Instagram</h4>
+            <p>Follow our official page</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:50%;"></div></div>
+            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
+            <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Resume</button>
+        </div>
+    </div>
 </div>
 
 <div class="video-modal" id="videoModal">
     <div class="modal-content">
         <span class="close-modal" onclick="closePopup()">&times;</span>
-        <button id="unmuteBtn" onclick="handleUnmute()"><i class="fa-solid fa-volume-high"></i> Tap to Unmute</button>
+        <button id="unmuteBtn" onclick="unmuteVideo()"><i class="fa-solid fa-volume-high"></i> Unmute</button>
         <div id="modalFrame"></div>
     </div>
     <div class="modal-footer">
@@ -124,6 +144,7 @@
     <button onclick="loginUser()">Login</button>
     <p style="color:#ff9800; cursor:pointer; font-weight:bold; margin-top:15px;" onclick="showPage('forgotPage')">Forgot Password?</p>
 </div>
+
 <div class="page-section auth-page" id="registerPage">
     <h2>Register</h2>
     <input type="text" id="rName" placeholder="Full Name"><br>
@@ -132,6 +153,7 @@
     <input type="password" id="rCPass" placeholder="Confirm Password"><br>
     <button onclick="registerUser()">Create Account</button>
 </div>
+
 <div class="page-section auth-page" id="forgotPage">
     <h2>Reset Password</h2>
     <input type="email" id="fEmail" placeholder="Enter Registered Email"><br>
@@ -162,34 +184,38 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+let currentTaskTimer;
+let activeVideoId = "";
+
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
     document.getElementById(id).style.display = 'block';
 }
 
-function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message)); }
+function loginUser() {
+    auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message));
+}
+
 function registerUser() {
     if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
     auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
         db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value, createdAt: new Date()});
     }).catch(e => alert(e.message));
 }
-function resetPassword() { auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message)); }
-function logout() { auth.signOut().then(() => location.reload()); }
 
-/* --- NEW UNMUTE LOGIC --- */
-let globalVideoId = "";
-
-function handleUnmute() {
-    const frame = document.getElementById('modalFrame');
-    const unmuteBtn = document.getElementById('unmuteBtn');
-    // Reload iframe with mute=0
-    frame.innerHTML = `<iframe src="https://www.youtube.com/embed/${globalVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-    unmuteBtn.style.display = "none";
+function resetPassword() {
+    auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message));
 }
 
-/* --- TASK FUNCTIONS (UPDATED) --- */
-let currentTaskTimer;
+function logout() { auth.signOut().then(() => location.reload()); }
+
+// UNMUTE FUNCTION
+function unmuteVideo() {
+    const modalFrame = document.getElementById('modalFrame');
+    document.getElementById('unmuteBtn').style.display = "none";
+    // Mute hatane ke liye iframe reload
+    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
+}
 
 function openVideoPopup(videoInput, taskId, videoSeconds) {
     const videoModal = document.getElementById('videoModal');
@@ -199,12 +225,12 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
     const unmuteBtn = document.getElementById('unmuteBtn');
 
     let videoId = videoInput.split('?')[0].split('/').pop();
-    globalVideoId = videoId; // Store for unmute function
+    activeVideoId = videoId;
 
     videoModal.style.display = "flex";
-    unmuteBtn.style.display = "flex"; // Show unmute button
-
-    // Initial Load (Muted for Autoplay)
+    unmuteBtn.style.display = "block";
+    
+    // Auto-play ke liye mute=1 zaruri hai
     modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
     let timeLeft = videoSeconds;
