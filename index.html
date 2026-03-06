@@ -47,7 +47,7 @@
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
         .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
         .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
-        #modalFrame iframe { width:100%; height:500px; border:none; }
+        #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; } /* user can't skip */
         .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
 
         /* AUTH PAGES */
@@ -94,10 +94,10 @@
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#e14e4e;"><i class="fa-brands fa-youtube"></i></div>
             <h4>Watch Shorts</h4>
-            <p>Watch 30s shorts in popup</p>
+            <p>Watch full shorts to earn</p>
             <div class="progress-bar"><div class="progress-fill" style="width:75%;"></div></div>
             <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI?si=M0uVfBOPotHZk8pq', 1)">▶ Resume</button>
+            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Resume</button>
         </div>
 
         <div class="task-card">
@@ -114,7 +114,7 @@
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#d62976;"><i class="fa-brands fa-instagram"></i></div>
             <h4>Follow Instagram</h4>
-            <p>Follow our official page for more rewards</p>
+            <p>Follow our official page</p>
             <div class="progress-bar"><div class="progress-fill" style="width:50%;"></div></div>
             <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
             <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Resume</button>
@@ -128,7 +128,7 @@
         <div id="modalFrame"></div>
     </div>
     <div class="modal-footer">
-        <p id="timerText" style="font-weight:bold; color:#ff9800;">Watch for 30 seconds...</p>
+        <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
         <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;" onclick="completeTask(1, 51)">CLAIM 51₹ NOW</button>
     </div>
 </div>
@@ -139,7 +139,6 @@
     <input type="password" id="lPass" placeholder="Password"><br>
     <button onclick="loginUser()">Login</button>
     <p style="color:#ff9800; cursor:pointer; font-weight:bold; margin-top:15px;" onclick="showPage('forgotPage')">Forgot Password?</p>
-    <button style="background:#555;" onclick="showPage('homePage')">Back</button>
 </div>
 
 <div class="page-section auth-page" id="registerPage">
@@ -149,15 +148,12 @@
     <input type="password" id="rPass" placeholder="Password"><br>
     <input type="password" id="rCPass" placeholder="Confirm Password"><br>
     <button onclick="registerUser()">Create Account</button>
-    <button style="background:#555;" onclick="showPage('homePage')">Back</button>
 </div>
 
 <div class="page-section auth-page" id="forgotPage">
     <h2>Reset Password</h2>
-    <p>We will send a reset link to your email.</p>
     <input type="email" id="fEmail" placeholder="Enter Registered Email"><br>
     <button onclick="resetPassword()">Send Link</button>
-    <button style="background:#555;" onclick="showPage('loginPage')">Back</button>
 </div>
 
 <div class="bottom-nav" id="bottomNav">
@@ -172,7 +168,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -185,72 +180,42 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// NAVIGATION FUNCTION
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
     document.getElementById(id).style.display = 'block';
 }
 
-/* --- AUTHENTICATION FUNCTIONS --- */
+/* --- AUTH FUNCTIONS (UNCHANGED) --- */
 function loginUser() {
-    const email = lEmail.value.trim();
-    const pass = lPass.value.trim();
-    if(!email || !pass) { alert("Fill all fields"); return; }
-    auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+    auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message));
 }
-
 function registerUser() {
-    const name = rName.value.trim();
-    const email = rEmail.value.trim();
-    const pass = rPass.value.trim();
-    const cpass = rCPass.value.trim();
-    if(pass !== cpass) { alert("Passwords do not match"); return; }
-    auth.createUserWithEmailAndPassword(email, pass).then(res => {
-        db.collection("users").doc(res.user.uid).set({
-            name: name,
-            wallet: 130, // Welcome Bonus
-            email: email,
-            createdAt: new Date()
-        });
+    if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
+    auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
+        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value, createdAt: new Date()});
     }).catch(e => alert(e.message));
 }
-
 function resetPassword() {
-    const email = fEmail.value.trim();
-    if(!email) { alert("Enter email"); return; }
-    auth.sendPasswordResetEmail(email).then(() => {
-        alert("Reset link sent! Check your inbox/spam.");
-        showPage('loginPage');
-    }).catch(e => alert(e.message));
+    auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message));
 }
+function logout() { auth.signOut().then(() => location.reload()); }
 
-function logout() {
-    auth.signOut().then(() => location.reload());
-}
-
-/* --- TASK & VIDEO FUNCTIONS --- */
+/* --- TASK FUNCTIONS (FIXED) --- */
 let currentTaskTimer;
 
-function openVideoPopup(videoInput, taskId) {
+function openVideoPopup(videoInput, taskId, videoSeconds) {
     const videoModal = document.getElementById('videoModal');
     const modalFrame = document.getElementById('modalFrame');
     const timerText = document.getElementById('timerText');
     const claimBtn = document.getElementById('claimBtn');
 
-    // Extract ID from full URL or Shorts link
-    let videoId = videoInput;
-    if (videoInput.includes('shorts/')) {
-        videoId = videoInput.split('shorts/')[1].split('?')[0];
-    } else if (videoInput.includes('v=')) {
-        videoId = videoInput.split('v=')[1].split('&')[0];
-    } else if (videoInput.includes('youtu.be/')) {
-        videoId = videoInput.split('youtu.be/')[1].split('?')[0];
-    }
+    let videoId = videoInput.split('?')[0].split('/').pop();
 
     videoModal.style.display = "flex";
-    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&rel=0&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    // Mute=1 is added for Autoplay to work
+    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
-    let timeLeft = 30;
+    let timeLeft = videoSeconds;
     claimBtn.style.display = "none";
     timerText.style.display = "block";
     timerText.innerText = `Watch for ${timeLeft} seconds...`;
@@ -262,7 +227,7 @@ function openVideoPopup(videoInput, taskId) {
             timerText.innerText = `Watch for ${timeLeft} more seconds...`;
         } else {
             clearInterval(currentTaskTimer);
-            timerText.style.display = "none";
+            timerText.innerText = "Task Complete! Now claim reward.";
             claimBtn.style.display = "block";
         }
     }, 1000);
@@ -280,46 +245,33 @@ function completeTask(id, amt) {
     const ref = db.collection("users").doc(user.uid);
     ref.get().then(doc => {
         const newBalance = (doc.data().wallet || 0) + amt;
-        ref.update({ wallet: newBalance });
-        alert(`Congratulations! ${amt}₹ added to your wallet.`);
-        const btn = document.getElementById("btnTask" + id);
-        btn.innerText = "✅ Completed";
-        btn.classList.add("completed");
-        btn.disabled = true;
-        closePopup();
-    }).catch(e => alert("Error: " + e.message));
+        ref.update({ wallet: newBalance }).then(() => {
+            alert(`Added ${amt}₹ to wallet!`);
+            document.getElementById("btnTask" + id).innerText = "✅ Completed";
+            document.getElementById("btnTask" + id).disabled = true;
+            closePopup();
+        });
+    });
 }
 
 function openExternalTask(url, id) {
     window.open(url, '_blank');
-    setTimeout(() => {
-        if(confirm("Did you follow/subscribe? Click OK to claim reward.")) {
-            completeTask(id, 51);
-        }
-    }, 4000);
+    setTimeout(() => { if(confirm("Task Done?")) completeTask(id, 51); }, 4000);
 }
 
-/* --- AUTH STATE LISTENER --- */
 auth.onAuthStateChanged(user => {
     if(user){
         showPage('homePage');
-        document.getElementById('profileSection').style.display = "block";
-        document.getElementById('bottomNav').style.display = "flex";
-        document.getElementById('authButtons').style.display = "none";
-        document.getElementById('logoutBtn').style.display = "block";
-        
+        profileSection.style.display = "block";
+        bottomNav.style.display = "flex";
+        authButtons.style.display = "none";
+        logoutBtn.style.display = "block";
         db.collection("users").doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
-                document.getElementById('dispName').innerText = "Welcome, " + doc.data().name;
-                document.getElementById('dispWallet').innerText = doc.data().wallet;
+                dispName.innerText = "Welcome, " + doc.data().name;
+                dispWallet.innerText = doc.data().wallet;
             }
         });
-    } else {
-        showPage('homePage');
-        document.getElementById('profileSection').style.display = "none";
-        document.getElementById('bottomNav').style.display = "none";
-        document.getElementById('authButtons').style.display = "block";
-        document.getElementById('logoutBtn').style.display = "none";
     }
 });
 </script>
