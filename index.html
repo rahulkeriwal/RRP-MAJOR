@@ -7,72 +7,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { margin:0; font-family:'Segoe UI', sans-serif; background:linear-gradient(135deg,#1e3c72,#2a5298); color:white; min-height:100vh; overflow-x: hidden; }
-        
-        /* HEADER */
         .header { display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(0,0,0,0.3); }
         .header button { padding:8px 14px; border:none; border-radius:6px; background:#ff9800; color:white; font-weight:bold; cursor:pointer; }
-
-        /* NOTICE */
         .notice-wrapper { background:#ff9800; overflow:hidden; white-space:nowrap; }
         .notice-text { display:inline-block; padding:8px 0; font-weight:bold; animation:slide 10s linear infinite; }
         @keyframes slide { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
-
-        /* SECTIONS */
         .page-section { display:none; padding:15px; text-align:center; padding-bottom:100px; }
         #homePage { display:block; }
-
-        /* HOME QUICK LINKS */
         .top-section { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
         .box { flex:1; height:90px; background:white; border-radius:15px; color:black; display:flex; flex-direction:column; justify-content:center; align-items:center; text-decoration:none; font-weight:bold; font-size:11px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
         .box img { width:30px; margin-bottom:5px; }
-
-        /* PROFILE & WALLET */
         .profile { margin-top:25px; display:none; }
         .wallet-box { margin-top:15px; background:rgba(255,255,255,0.2); padding:15px; border-radius:15px; border: 1px solid rgba(255,255,255,0.3); }
-
-        /* TASK GRID */
         .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .task-card { background: #6a4fa3; border-radius: 20px; padding: 15px; text-align: left; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .task-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; font-size: 18px; color: white; }
         .reward-tag { position: absolute; top: 12px; right: 10px; background: red; color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; }
-        .task-card h4 { margin: 5px 0; font-size: 14px; }
-        .task-card p { font-size: 10px; color: #ddd; margin-bottom: 8px; line-height: 1.2; }
-        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 10px; margin: 8px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #007bff; }
-        .task-info { display: flex; justify-content: space-between; font-size: 9px; color: #eee; margin-bottom: 10px; }
-        .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .task-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; font-size: 18px; color: white; }
+        .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; }
         .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; }
-
-        /* VIDEO MODAL (POPUP) */
+        
+        /* MODALS */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
         .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
-        .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
         #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; }
-        .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
+        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; z-index: 100; }
+        
+        /* CLAIM NOTIFY */
+        #claimNotify { display:none; position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#4caf50; color:white; padding:15px 25px; border-radius:50px; font-weight:bold; z-index:4000; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
 
-        /* UNMUTE BUTTON STYLE */
-        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-
-        /* COMING SOON MODAL */
+        /* WITHDRAW MODAL */
         #comingSoonModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; }
-        .cs-content { background: white; color: #333; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .cs-content i { font-size: 50px; color: #f39c12; margin-bottom: 15px; }
-        .cs-content h2 { margin: 0; color: #1e3c72; }
-        .cs-content p { font-size: 14px; margin: 10px 0 20px; color: #666; }
-        .cs-btn { background: #1e3c72; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* CLAIM NOTIFICATION (For External Tasks) */
-        #claimNotify { display:none; position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#4caf50; color:white; padding:15px 25px; border-radius:50px; font-weight:bold; z-index:4000; box-shadow:0 5px 15px rgba(0,0,0,0.3); animation: bounce 0.5s ease-out; }
-        @keyframes bounce { 0% { bottom: -50px; } 100% { bottom: 90px; } }
-
-        /* AUTH PAGES */
-        .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; font-size: 14px; }
-        .auth-page button { padding:12px; width:95%; background:#ff9800; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; margin-top:10px; }
-
-        /* BOTTOM NAV */
-        .bottom-nav { position:fixed; bottom:0; width:100%; background:white; display:none; justify-content:space-around; padding:10px 0; border-radius:20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); z-index: 1000; }
-        .nav-item { display:flex; flex-direction:column; align-items:center; background:none; border:none; color:#555; font-size:12px; font-weight:600; cursor:pointer; flex:1; }
-        .nav-item i { font-size:20px; margin-bottom:4px; color:#f39c12; }
+        .cs-content { background: white; color: #333; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; }
+        
+        .bottom-nav { position:fixed; bottom:0; width:100%; background:white; display:none; justify-content:space-around; padding:10px 0; border-radius:20px 20px 0 0; z-index: 1000; }
+        .nav-item { display:flex; flex-direction:column; align-items:center; background:none; border:none; color:#555; font-size:12px; font-weight:600; flex:1; }
+        .nav-item i { font-size:20px; color:#f39c12; }
+        .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; }
+        .auth-page button { padding:12px; width:95%; background:#ff9800; border:none; border-radius:8px; color:white; font-weight:bold; }
     </style>
 </head>
 <body>
@@ -109,56 +80,45 @@
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#e14e4e;"><i class="fa-brands fa-youtube"></i></div>
             <h4>Watch Shorts</h4>
-            <p>Watch full shorts to earn</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:75%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Resume</button>
+            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Start</button>
         </div>
-
         <div class="task-card">
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#4e7ae1;"><i class="fa-solid fa-star"></i></div>
             <h4>Subscribe</h4>
-            <p>Subscribe and earn coins</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:40%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/@animationn-story', 2)">▶ Resume</button>
+            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/@animationn-story', 2)">▶ Start</button>
         </div>
-
         <div class="task-card" style="grid-column: span 2;">
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#d62976;"><i class="fa-brands fa-instagram"></i></div>
             <h4>Follow Instagram</h4>
-            <p>Follow our official page</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:50%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Resume</button>
+            <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Start</button>
         </div>
     </div>
 </div>
 
 <div id="claimNotify" onclick="completeTask(currentTaskId, 51)">
-    <i class="fa-solid fa-gift"></i> CLAIM ₹51 NOW
+    <i class="fa-solid fa-gift"></i> CLICK TO CLAIM ₹51
 </div>
 
 <div class="video-modal" id="videoModal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closePopup()">&times;</span>
-        <button id="unmuteBtn" onclick="unmuteVideo()"><i class="fa-solid fa-volume-high"></i> Unmute</button>
+        <span onclick="closePopup()" style="position:absolute;top:-40px;right:0;font-size:30px;color:white;cursor:pointer;">&times;</span>
+        <button id="unmuteBtn" onclick="unmuteVideo()">Unmute</button>
         <div id="modalFrame"></div>
     </div>
-    <div class="modal-footer">
-        <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
-        <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;">CLAIM 51₹ NOW</button>
+    <div class="modal-footer" style="text-align:center; margin-top:15px;">
+        <p id="timerText" style="color:#ff9800; font-weight:bold;"></p>
+        <button id="claimBtn" style="padding:10px 20px; background:#4caf50; color:white; border:none; border-radius:10px; display:none;" onclick="completeTask(currentTaskId, 51)">CLAIM ₹51 NOW</button>
     </div>
 </div>
 
 <div id="comingSoonModal">
     <div class="cs-content">
-        <i class="fa-solid fa-rocket"></i>
-        <h2>Coming Soon!</h2>
-        <p>Our Withdrawal system is being polished. You will be able to redeem your earnings very soon!</p>
-        <button class="cs-btn" onclick="document.getElementById('comingSoonModal').style.display='none'">Got it!</button>
+        <i class="fa-solid fa-rocket" style="font-size:40px; color:#f39c12;"></i>
+        <h2>Coming Soon</h2>
+        <p>Withdrawal system will be live shortly!</p>
+        <button onclick="document.getElementById('comingSoonModal').style.display='none'">Close</button>
     </div>
 </div>
 
@@ -167,29 +127,19 @@
     <input type="email" id="lEmail" placeholder="Email"><br>
     <input type="password" id="lPass" placeholder="Password"><br>
     <button onclick="loginUser()">Login</button>
-    <p style="color:#ff9800; cursor:pointer; font-weight:bold; margin-top:15px;" onclick="showPage('forgotPage')">Forgot Password?</p>
 </div>
-
 <div class="page-section auth-page" id="registerPage">
     <h2>Register</h2>
-    <input type="text" id="rName" placeholder="Full Name"><br>
+    <input type="text" id="rName" placeholder="Name"><br>
     <input type="email" id="rEmail" placeholder="Email"><br>
     <input type="password" id="rPass" placeholder="Password"><br>
-    <input type="password" id="rCPass" placeholder="Confirm Password"><br>
-    <button onclick="registerUser()">Create Account</button>
-</div>
-
-<div class="page-section auth-page" id="forgotPage">
-    <h2>Reset Password</h2>
-    <input type="email" id="fEmail" placeholder="Enter Registered Email"><br>
-    <button onclick="resetPassword()">Send Link</button>
+    <button onclick="registerUser()">Create</button>
 </div>
 
 <div class="bottom-nav" id="bottomNav">
     <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i><span>Home</span></button>
     <button class="nav-item" onclick="showPage('taskPage')"><i class="fa-solid fa-list-check"></i><span>Task</span></button>
     <button class="nav-item" onclick="document.getElementById('comingSoonModal').style.display='flex'"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></button>
-    <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-user"></i><span>Me</span></button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -211,70 +161,52 @@ const db = firebase.firestore();
 
 let currentTaskTimer;
 let activeVideoId = "";
-let currentTaskId = 1;
+let currentTaskId = 0;
 
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
     document.getElementById(id).style.display = 'block';
 }
 
-function loginUser() {
-    auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message));
-}
-
+function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message)); }
 function registerUser() {
-    if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
     auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
-        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value, createdAt: new Date()});
+        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 0, email: rEmail.value});
     }).catch(e => alert(e.message));
 }
-
-function resetPassword() {
-    auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message));
-}
-
 function logout() { auth.signOut().then(() => location.reload()); }
 
 function unmuteVideo() {
-    const modalFrame = document.getElementById('modalFrame');
     document.getElementById('unmuteBtn').style.display = "none";
-    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&playsinline=1" allow="autoplay"></iframe>`;
 }
 
-function openVideoPopup(videoInput, taskId, videoSeconds) {
-    const videoModal = document.getElementById('videoModal');
-    const modalFrame = document.getElementById('modalFrame');
-    const timerText = document.getElementById('timerText');
-    const claimBtn = document.getElementById('claimBtn');
-    const unmuteBtn = document.getElementById('unmuteBtn');
-
-    let videoId = videoInput.split('?')[0].split('/').pop();
-    activeVideoId = videoId;
-    currentTaskId = taskId;
-
-    videoModal.style.display = "flex";
-    unmuteBtn.style.display = "block";
-    claimBtn.style.display = "none";
+function openVideoPopup(vId, tId, sec) {
+    activeVideoId = vId;
+    currentTaskId = tId;
+    document.getElementById('videoModal').style.display = "flex";
+    document.getElementById('unmuteBtn').style.display = "block";
+    document.getElementById('claimBtn').style.display = "none";
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&controls=0&playsinline=1" allow="autoplay"></iframe>`;
     
-    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-    
-    let timeLeft = videoSeconds;
-    timerText.style.display = "block";
-    timerText.innerText = `Watch for ${timeLeft} seconds...`;
-    
-    if(currentTaskTimer) clearInterval(currentTaskTimer);
+    let left = sec;
+    document.getElementById('timerText').innerText = "Watch: " + left + "s";
+    clearInterval(currentTaskTimer);
     currentTaskTimer = setInterval(() => {
-        timeLeft--;
-        if(timeLeft > 0) {
-            timerText.innerText = `Watch for ${timeLeft} more seconds...`;
-        } else {
+        left--;
+        if(left > 0) document.getElementById('timerText').innerText = "Watch: " + left + "s";
+        else {
             clearInterval(currentTaskTimer);
-            timerText.innerText = "Task Complete! Now claim reward.";
-            claimBtn.style.display = "block";
-            claimBtn.onclick = function() { completeTask(currentTaskId, 51); };
-            unmuteBtn.style.display = "none";
+            document.getElementById('timerText').innerText = "Done!";
+            document.getElementById('claimBtn').style.display = "inline-block";
         }
     }, 1000);
+}
+
+function openExternalTask(url, tId) {
+    currentTaskId = tId;
+    window.open(url, '_blank');
+    setTimeout(() => { document.getElementById('claimNotify').style.display = "block"; }, 5000);
 }
 
 function closePopup() {
@@ -283,47 +215,36 @@ function closePopup() {
     clearInterval(currentTaskTimer);
 }
 
+// MAIN CLAIM LOGIC (SABSE IMPORTANT)
 function completeTask(id, amt) {
     const user = auth.currentUser;
-    if(!user) return;
-    const ref = db.collection("users").doc(user.uid);
-    ref.get().then(doc => {
-        const currentWallet = Number(doc.data().wallet) || 0;
-        const newBalance = currentWallet + amt;
-        ref.update({ wallet: newBalance }).then(() => {
-            alert(`Added ${amt}₹ to wallet!`);
-            const btn = document.getElementById("btnTask" + id);
-            if(btn) {
-                btn.innerText = "✅ Completed";
-                btn.disabled = true;
-            }
-            document.getElementById('claimNotify').style.display = 'none';
-            closePopup();
-        });
-    });
-}
+    if(!user) return alert("Login First");
 
-function openExternalTask(url, id) {
-    currentTaskId = id;
-    window.open(url, '_blank');
-    // 5 second baad claim button dikhega screen par
-    setTimeout(() => {
-        document.getElementById('claimNotify').style.display = 'block';
-    }, 5000);
+    // Firebase Increment method (Best for Wallet)
+    db.collection("users").doc(user.uid).update({
+        wallet: firebase.firestore.FieldValue.increment(amt)
+    }).then(() => {
+        alert("₹" + amt + " Added Successfully!");
+        const b = document.getElementById("btnTask" + id);
+        if(b) { b.innerText = "✅ Done"; b.disabled = true; }
+        document.getElementById('claimNotify').style.display = "none";
+        closePopup();
+    }).catch(err => {
+        console.error(err);
+        alert("Error adding money: " + err.message);
+    });
 }
 
 auth.onAuthStateChanged(user => {
     if(user){
         showPage('homePage');
-        document.getElementById('profileSection').style.display = "block";
         document.getElementById('bottomNav').style.display = "flex";
         document.getElementById('authButtons').style.display = "none";
         document.getElementById('logoutBtn').style.display = "block";
+        document.getElementById('profileSection').style.display = "block";
         db.collection("users").doc(user.uid).onSnapshot(doc => {
-            if(doc.exists){
-                document.getElementById('dispName').innerText = "Welcome, " + doc.data().name;
-                document.getElementById('dispWallet').innerText = doc.data().wallet;
-            }
+            if(doc.exists) document.getElementById('dispWallet').innerText = doc.data().wallet || 0;
+            if(doc.exists) document.getElementById('dispName').innerText = "Welcome, " + doc.data().name;
         });
     }
 });
