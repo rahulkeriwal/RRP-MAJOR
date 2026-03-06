@@ -53,6 +53,14 @@
         /* UNMUTE BUTTON STYLE */
         #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
+        /* COMING SOON MODAL */
+        #comingSoonModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; }
+        .cs-content { background: white; color: #333; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .cs-content i { font-size: 50px; color: #f39c12; margin-bottom: 15px; }
+        .cs-content h2 { margin: 0; color: #1e3c72; }
+        .cs-content p { font-size: 14px; margin: 10px 0 20px; color: #666; }
+        .cs-btn { background: #1e3c72; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
         /* AUTH PAGES */
         .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; font-size: 14px; }
         .auth-page button { padding:12px; width:95%; background:#ff9800; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; margin-top:10px; }
@@ -133,7 +141,16 @@
     </div>
     <div class="modal-footer">
         <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
-        <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;" onclick="completeTask(1, 51)">CLAIM 51₹ NOW</button>
+        <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;">CLAIM 51₹ NOW</button>
+    </div>
+</div>
+
+<div id="comingSoonModal">
+    <div class="cs-content">
+        <i class="fa-solid fa-rocket"></i>
+        <h2>Coming Soon!</h2>
+        <p>Our Withdrawal system is being polished. You will be able to redeem your earnings very soon!</p>
+        <button class="cs-btn" onclick="document.getElementById('comingSoonModal').style.display='none'">Got it!</button>
     </div>
 </div>
 
@@ -163,8 +180,8 @@
 <div class="bottom-nav" id="bottomNav">
     <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i><span>Home</span></button>
     <button class="nav-item" onclick="showPage('taskPage')"><i class="fa-solid fa-list-check"></i><span>Task</span></button>
-    <button class="nav-item"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></button>
-    <button class="nav-item"><i class="fa-solid fa-user"></i><span>Me</span></button>
+    <button class="nav-item" onclick="document.getElementById('comingSoonModal').style.display='flex'"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></button>
+    <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-user"></i><span>Me</span></button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -186,6 +203,7 @@ const db = firebase.firestore();
 
 let currentTaskTimer;
 let activeVideoId = "";
+let currentTaskId = 1;
 
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
@@ -213,7 +231,6 @@ function logout() { auth.signOut().then(() => location.reload()); }
 function unmuteVideo() {
     const modalFrame = document.getElementById('modalFrame');
     document.getElementById('unmuteBtn').style.display = "none";
-    // Mute hatane ke liye iframe reload
     modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
 }
 
@@ -226,15 +243,15 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
 
     let videoId = videoInput.split('?')[0].split('/').pop();
     activeVideoId = videoId;
+    currentTaskId = taskId;
 
     videoModal.style.display = "flex";
     unmuteBtn.style.display = "block";
+    claimBtn.style.display = "none";
     
-    // Auto-play ke liye mute=1 zaruri hai
     modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
     let timeLeft = videoSeconds;
-    claimBtn.style.display = "none";
     timerText.style.display = "block";
     timerText.innerText = `Watch for ${timeLeft} seconds...`;
     
@@ -247,6 +264,7 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
             clearInterval(currentTaskTimer);
             timerText.innerText = "Task Complete! Now claim reward.";
             claimBtn.style.display = "block";
+            claimBtn.onclick = function() { completeTask(currentTaskId, 51); };
             unmuteBtn.style.display = "none";
         }
     }, 1000);
@@ -263,11 +281,15 @@ function completeTask(id, amt) {
     if(!user) return;
     const ref = db.collection("users").doc(user.uid);
     ref.get().then(doc => {
-        const newBalance = (doc.data().wallet || 0) + amt;
+        const currentWallet = Number(doc.data().wallet) || 0;
+        const newBalance = currentWallet + amt;
         ref.update({ wallet: newBalance }).then(() => {
             alert(`Added ${amt}₹ to wallet!`);
-            document.getElementById("btnTask" + id).innerText = "✅ Completed";
-            document.getElementById("btnTask" + id).disabled = true;
+            const btn = document.getElementById("btnTask" + id);
+            if(btn) {
+                btn.innerText = "✅ Completed";
+                btn.disabled = true;
+            }
             closePopup();
         });
     });
