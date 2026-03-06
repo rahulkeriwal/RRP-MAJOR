@@ -41,18 +41,17 @@
         .progress-fill { height: 100%; background: #007bff; }
         .task-info { display: flex; justify-content: space-between; font-size: 9px; color: #eee; margin-bottom: 10px; }
         .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
-        .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; opacity: 0.8; }
+        .action-btn.completed { background: #4caf50 !important; color: white !important; cursor: default; }
 
         /* VIDEO MODAL (POPUP) */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
         .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
         .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
-        #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: auto; }
+        #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; }
         .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
 
-        /* UNMUTE INSTRUCTION */
-        #unmuteHint { background: rgba(255, 152, 0, 0.8); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        /* UNMUTE OVERLAY */
+        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 152, 0, 0.9); color: white; padding: 12px 20px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; z-index: 10; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
 
         /* AUTH PAGES */
         .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; font-size: 14px; }
@@ -75,12 +74,13 @@
     <div id="logoutBtn" style="display:none;"><button onclick="logout()">Logout</button></div>
 </div>
 
-<div class="notice-wrapper"><div class="notice-text">🔥 Complete Daily Tasks & Earn 51₹ Rewards Instantly! 🔥</div></div>
+<div class="notice-wrapper"><div class="notice-text">🔥 New Tasks Available! Earn 51₹ Reward for every YouTube and Instagram Task! 🔥</div></div>
 
 <div class="page-section" id="homePage">
     <div class="top-section">
         <a href="https://t.me/rrp_major" class="box" target="_blank">Telegram</a>
         <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank">WhatsApp</a>
+        <a href="#" class="box">Chat Us</a>
         <a href="https://youtube.com/@animationn-story" class="box" target="_blank">YouTube</a>
     </div>
     <div class="profile" id="profileSection">
@@ -97,18 +97,18 @@
             <div class="reward-tag">+51 INR</div>
             <div class="task-icon" style="background:#e14e4e;"><i class="fa-brands fa-youtube"></i></div>
             <h4>Watch Shorts</h4>
-            <p>Watch 30s to earn reward</p>
+            <p>Watch full shorts to earn</p>
             <div class="progress-bar"><div class="progress-fill" style="width:75%;"></div></div>
             <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 30)">▶ Resume</button>
+            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Resume</button>
         </div>
-    </div>
+        </div>
 </div>
 
 <div class="video-modal" id="videoModal">
-    <div id="unmuteHint">🔇 Video is Muted. Tap video to Unmute!</div>
     <div class="modal-content">
         <span class="close-modal" onclick="closePopup()">&times;</span>
+        <button id="unmuteBtn" onclick="handleUnmute()"><i class="fa-solid fa-volume-high"></i> Tap to Unmute</button>
         <div id="modalFrame"></div>
     </div>
     <div class="modal-footer">
@@ -122,28 +122,27 @@
     <input type="email" id="lEmail" placeholder="Email"><br>
     <input type="password" id="lPass" placeholder="Password"><br>
     <button onclick="loginUser()">Login</button>
-    <p onclick="showPage('forgotPage')" style="color:#ff9800; cursor:pointer;">Forgot Password?</p>
+    <p style="color:#ff9800; cursor:pointer; font-weight:bold; margin-top:15px;" onclick="showPage('forgotPage')">Forgot Password?</p>
 </div>
-
 <div class="page-section auth-page" id="registerPage">
     <h2>Register</h2>
-    <input type="text" id="rName" placeholder="Name"><br>
+    <input type="text" id="rName" placeholder="Full Name"><br>
     <input type="email" id="rEmail" placeholder="Email"><br>
     <input type="password" id="rPass" placeholder="Password"><br>
     <input type="password" id="rCPass" placeholder="Confirm Password"><br>
-    <button onclick="registerUser()">Register</button>
+    <button onclick="registerUser()">Create Account</button>
 </div>
-
 <div class="page-section auth-page" id="forgotPage">
     <h2>Reset Password</h2>
-    <input type="email" id="fEmail" placeholder="Enter Email"><br>
-    <button onclick="resetPassword()">Send Reset Link</button>
+    <input type="email" id="fEmail" placeholder="Enter Registered Email"><br>
+    <button onclick="resetPassword()">Send Link</button>
 </div>
 
 <div class="bottom-nav" id="bottomNav">
-    <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i>Home</button>
-    <button class="nav-item" onclick="showPage('taskPage')"><i class="fa-solid fa-list-check"></i>Task</button>
-    <button class="nav-item"><i class="fa-solid fa-wallet"></i>Withdraw</button>
+    <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i><span>Home</span></button>
+    <button class="nav-item" onclick="showPage('taskPage')"><i class="fa-solid fa-list-check"></i><span>Task</span></button>
+    <button class="nav-item"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></button>
+    <button class="nav-item"><i class="fa-solid fa-user"></i><span>Me</span></button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -151,7 +150,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -169,46 +167,61 @@ function showPage(id) {
     document.getElementById(id).style.display = 'block';
 }
 
-/* AUTH LOGIC */
 function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message)); }
 function registerUser() {
     if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
     auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
-        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value});
+        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value, createdAt: new Date()});
     }).catch(e => alert(e.message));
 }
-function resetPassword() { auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent")).catch(e => alert(e.message)); }
+function resetPassword() { auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message)); }
 function logout() { auth.signOut().then(() => location.reload()); }
 
-/* VIDEO & TASK LOGIC */
-let activeTimer;
+/* --- NEW UNMUTE LOGIC --- */
+let globalVideoId = "";
 
-function openVideoPopup(vid, taskId, duration) {
-    const modal = document.getElementById('videoModal');
+function handleUnmute() {
     const frame = document.getElementById('modalFrame');
-    const timerTxt = document.getElementById('timerText');
-    const claimBtn = document.getElementById('claimBtn');
-    const unmuteHint = document.getElementById('unmuteHint');
+    const unmuteBtn = document.getElementById('unmuteBtn');
+    // Reload iframe with mute=0
+    frame.innerHTML = `<iframe src="https://www.youtube.com/embed/${globalVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
+    unmuteBtn.style.display = "none";
+}
 
-    modal.style.display = "flex";
-    // mute=1 is mandatory for Autoplay
-    frame.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay"></iframe>`;
+/* --- TASK FUNCTIONS (UPDATED) --- */
+let currentTaskTimer;
+
+function openVideoPopup(videoInput, taskId, videoSeconds) {
+    const videoModal = document.getElementById('videoModal');
+    const modalFrame = document.getElementById('modalFrame');
+    const timerText = document.getElementById('timerText');
+    const claimBtn = document.getElementById('claimBtn');
+    const unmuteBtn = document.getElementById('unmuteBtn');
+
+    let videoId = videoInput.split('?')[0].split('/').pop();
+    globalVideoId = videoId; // Store for unmute function
+
+    videoModal.style.display = "flex";
+    unmuteBtn.style.display = "flex"; // Show unmute button
+
+    // Initial Load (Muted for Autoplay)
+    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
-    let timeLeft = duration;
+    let timeLeft = videoSeconds;
     claimBtn.style.display = "none";
-    unmuteHint.style.display = "block";
-    timerTxt.innerText = `Please watch for ${timeLeft} seconds...`;
+    timerText.style.display = "block";
+    timerText.innerText = `Watch for ${timeLeft} seconds...`;
     
-    if(activeTimer) clearInterval(activeTimer);
-    activeTimer = setInterval(() => {
+    if(currentTaskTimer) clearInterval(currentTaskTimer);
+    currentTaskTimer = setInterval(() => {
         timeLeft--;
         if(timeLeft > 0) {
-            timerTxt.innerText = `Please watch for ${timeLeft} more seconds...`;
+            timerText.innerText = `Watch for ${timeLeft} more seconds...`;
         } else {
-            clearInterval(activeTimer);
-            timerTxt.innerText = "Video Finished! Claim your reward.";
+            clearInterval(currentTaskTimer);
+            timerText.innerText = "Task Complete! Now claim reward.";
             claimBtn.style.display = "block";
-            unmuteHint.style.display = "none";
+            unmuteBtn.style.display = "none";
         }
     }, 1000);
 }
@@ -216,34 +229,40 @@ function openVideoPopup(vid, taskId, duration) {
 function closePopup() {
     document.getElementById('videoModal').style.display = "none";
     document.getElementById('modalFrame').innerHTML = "";
-    clearInterval(activeTimer);
+    clearInterval(currentTaskTimer);
 }
 
 function completeTask(id, amt) {
     const user = auth.currentUser;
+    if(!user) return;
     const ref = db.collection("users").doc(user.uid);
     ref.get().then(doc => {
-        const newBal = (doc.data().wallet || 0) + amt;
-        ref.update({ wallet: newBal }).then(() => {
-            alert("Reward Added!");
-            document.getElementById("btnTask"+id).innerText = "✅ Completed";
-            document.getElementById("btnTask"+id).disabled = true;
+        const newBalance = (doc.data().wallet || 0) + amt;
+        ref.update({ wallet: newBalance }).then(() => {
+            alert(`Added ${amt}₹ to wallet!`);
+            document.getElementById("btnTask" + id).innerText = "✅ Completed";
+            document.getElementById("btnTask" + id).disabled = true;
             closePopup();
         });
     });
 }
 
+function openExternalTask(url, id) {
+    window.open(url, '_blank');
+    setTimeout(() => { if(confirm("Task Done?")) completeTask(id, 51); }, 4000);
+}
+
 auth.onAuthStateChanged(user => {
     if(user){
         showPage('homePage');
-        profileSection.style.display = "block";
-        bottomNav.style.display = "flex";
-        authButtons.style.display = "none";
-        logoutBtn.style.display = "block";
+        document.getElementById('profileSection').style.display = "block";
+        document.getElementById('bottomNav').style.display = "flex";
+        document.getElementById('authButtons').style.display = "none";
+        document.getElementById('logoutBtn').style.display = "block";
         db.collection("users").doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
-                dispName.innerText = "Welcome, " + doc.data().name;
-                dispWallet.innerText = doc.data().wallet;
+                document.getElementById('dispName').innerText = "Welcome, " + doc.data().name;
+                document.getElementById('dispWallet').innerText = doc.data().wallet;
             }
         });
     }
