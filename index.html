@@ -50,7 +50,6 @@
         #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; }
         .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
 
-        /* UNMUTE BUTTON STYLE */
         #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
         /* AUTH PAGES */
@@ -133,7 +132,7 @@
     </div>
     <div class="modal-footer">
         <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
-        <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;" onclick="completeTask(1, 51)">CLAIM 51₹ NOW</button>
+        <button id="claimBtn" style="padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; display:none; font-weight:bold;">CLAIM 51₹ NOW</button>
     </div>
 </div>
 
@@ -186,6 +185,7 @@ const db = firebase.firestore();
 
 let currentTaskTimer;
 let activeVideoId = "";
+let currentActiveTaskId = 1; // Naya variable task track karne ke liye
 
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
@@ -209,11 +209,9 @@ function resetPassword() {
 
 function logout() { auth.signOut().then(() => location.reload()); }
 
-// UNMUTE FUNCTION
 function unmuteVideo() {
     const modalFrame = document.getElementById('modalFrame');
     document.getElementById('unmuteBtn').style.display = "none";
-    // Mute hatane ke liye iframe reload
     modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
 }
 
@@ -226,15 +224,15 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
 
     let videoId = videoInput.split('?')[0].split('/').pop();
     activeVideoId = videoId;
+    currentActiveTaskId = taskId; // ID save kar rahe hain
 
     videoModal.style.display = "flex";
     unmuteBtn.style.display = "block";
+    claimBtn.style.display = "none";
     
-    // Auto-play ke liye mute=1 zaruri hai
     modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
     let timeLeft = videoSeconds;
-    claimBtn.style.display = "none";
     timerText.style.display = "block";
     timerText.innerText = `Watch for ${timeLeft} seconds...`;
     
@@ -248,6 +246,8 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
             timerText.innerText = "Task Complete! Now claim reward.";
             claimBtn.style.display = "block";
             unmuteBtn.style.display = "none";
+            // Button par click function set karein
+            claimBtn.onclick = function() { completeTask(currentActiveTaskId, 51); };
         }
     }, 1000);
 }
@@ -262,14 +262,20 @@ function completeTask(id, amt) {
     const user = auth.currentUser;
     if(!user) return;
     const ref = db.collection("users").doc(user.uid);
-    ref.get().then(doc => {
-        const newBalance = (doc.data().wallet || 0) + amt;
-        ref.update({ wallet: newBalance }).then(() => {
-            alert(`Added ${amt}₹ to wallet!`);
-            document.getElementById("btnTask" + id).innerText = "✅ Completed";
-            document.getElementById("btnTask" + id).disabled = true;
-            closePopup();
-        });
+    
+    // Wallet update using FieldValue.increment
+    ref.update({ 
+        wallet: firebase.firestore.FieldValue.increment(amt) 
+    }).then(() => {
+        alert(`Added ${amt}₹ to wallet!`);
+        const targetBtn = document.getElementById("btnTask" + id);
+        if(targetBtn) {
+            targetBtn.innerText = "✅ Completed";
+            targetBtn.disabled = true;
+        }
+        closePopup();
+    }).catch(err => {
+        alert("Database error: Check your Firebase Rules.");
     });
 }
 
