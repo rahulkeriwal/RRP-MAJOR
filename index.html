@@ -25,7 +25,6 @@
         .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
         .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; }
         
-        /* Video Popup Styling */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
         .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
         .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
@@ -51,7 +50,7 @@
     <div id="logoutBtn" style="display:none;"><button onclick="logout()">Logout</button></div>
 </div>
 
-<div class="notice-wrapper"><div class="notice-text">🔥 Signup get ₹91! Tasks refresh every 24 hours! 🔥</div></div>
+<div class="notice-wrapper"><div class="notice-text">🔥 Login back to see your earnings! Tasks refresh every 24 hours! 🔥</div></div>
 
 <div class="page-section" id="homePage">
     <div class="top-section">
@@ -135,7 +134,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase Configuration (Same as yours)
 const firebaseConfig = {
   apiKey: "AIzaSyCIXwtirHUvLfReJziJ7Oyy975Kpr5ZDOU",
   authDomain: "rrp-earn-app.firebaseapp.com",
@@ -170,7 +168,7 @@ function registerUser() {
         db.collection("users").doc(res.user.uid).set({
             name: rName.value, wallet: bonus, email: rEmail.value,
             referredBy: referredBy || null, teamCount: 0, 
-            lastCompleted: {}, // Task tracking
+            lastCompleted: {}, 
             createdAt: new Date()
         }).then(() => {
             if(referredBy) {
@@ -186,14 +184,12 @@ function registerUser() {
 function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message)); }
 function logout() { auth.signOut().then(() => location.reload()); }
 
-// --- TASK LIMIT LOGIC ---
-function checkTaskAvailability(userData) {
+// --- FIXED PERSISTENCE LOGIC ---
+function checkTaskAvailability(tasks) {
     const today = new Date().toDateString();
-    const tasks = userData.lastCompleted || {};
-    
     [1, 2].forEach(taskId => {
         const btn = document.getElementById("btnTask" + taskId);
-        if (tasks[taskId] === today) {
+        if (tasks && tasks[taskId] === today) {
             btn.innerText = "✅ Done Today";
             btn.disabled = true;
         } else {
@@ -235,9 +231,7 @@ function openVideoPopup(vId, tId, sec) {
 
 function completeTask(id, amt) {
     const today = new Date().toDateString();
-    const userRef = db.collection("users").doc(auth.currentUser.uid);
-    
-    userRef.update({
+    db.collection("users").doc(auth.currentUser.uid).update({
         wallet: firebase.firestore.FieldValue.increment(amt),
         [`lastCompleted.${id}`]: today
     }).then(() => {
@@ -271,13 +265,16 @@ auth.onAuthStateChanged(user => {
         document.getElementById('profileSection').style.display = "block";
         document.getElementById('refLink').innerText = window.location.origin + "?ref=" + user.uid;
         
+        // Is snapshot se login/logout ke baad bhi status restore hoga
         db.collection("users").doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
                 const data = doc.data();
                 document.getElementById('dispName').innerText = "Welcome, " + data.name;
                 document.getElementById('dispWallet').innerText = data.wallet;
                 document.getElementById('teamCount').innerText = data.teamCount || 0;
-                checkTaskAvailability(data); // Button status update
+                
+                // Yahan database se purana record load ho raha hai
+                checkTaskAvailability(data.lastCompleted);
             }
         });
     }
