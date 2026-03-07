@@ -7,56 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { margin:0; font-family:'Segoe UI', sans-serif; background:linear-gradient(135deg,#1e3c72,#2a5298); color:white; min-height:100vh; overflow-x: hidden; }
-        
-        /* HEADER */
         .header { display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(0,0,0,0.3); }
         .header button { padding:8px 14px; border:none; border-radius:6px; background:#ff9800; color:white; font-weight:bold; cursor:pointer; }
-
-        /* NOTICE */
         .notice-wrapper { background:#ff9800; overflow:hidden; white-space:nowrap; }
         .notice-text { display:inline-block; padding:8px 0; font-weight:bold; animation:slide 10s linear infinite; }
         @keyframes slide { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
-
-        /* SECTIONS */
         .page-section { display:none; padding:15px; text-align:center; padding-bottom:100px; }
         #homePage { display:block; }
-
-        /* HOME QUICK LINKS */
         .top-section { display:flex; justify-content:space-between; gap:10px; margin-top:20px; }
         .box { flex:1; height:90px; background:white; border-radius:15px; color:black; display:flex; flex-direction:column; justify-content:center; align-items:center; text-decoration:none; font-weight:bold; font-size:11px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
         .box img { width:30px; margin-bottom:5px; }
-
-        /* PROFILE & WALLET */
         .profile { margin-top:25px; display:none; }
         .wallet-box { margin-top:15px; background:rgba(255,255,255,0.2); padding:15px; border-radius:15px; border: 1px solid rgba(255,255,255,0.3); }
-
-        /* TASK GRID */
         .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .task-card { background: #6a4fa3; border-radius: 20px; padding: 15px; text-align: left; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .task-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; font-size: 18px; color: white; }
         .reward-tag { position: absolute; top: 12px; right: 10px; background: red; color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; }
-        .task-card h4 { margin: 5px 0; font-size: 14px; }
-        .task-card p { font-size: 10px; color: #ddd; margin-bottom: 8px; line-height: 1.2; }
-        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 10px; margin: 8px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #007bff; }
-        .task-info { display: flex; justify-content: space-between; font-size: 9px; color: #eee; margin-bottom: 10px; }
         .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
         .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; }
-
-        /* VIDEO MODAL (POPUP) */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
         .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
         .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
         #modalFrame iframe { width:100%; height:500px; border:none; pointer-events: none; }
-        .modal-footer { margin-top: 15px; text-align: center; width: 100%; }
-
-        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-
-        /* AUTH PAGES */
-        .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; font-size: 14px; }
-        .auth-page button { padding:12px; width:95%; background:#ff9800; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; margin-top:10px; }
-
-        /* BOTTOM NAV */
+        #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; }
+        .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; }
+        .auth-page button { padding:12px; width:95%; background:#ff9800; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; }
         .bottom-nav { position:fixed; bottom:0; width:100%; background:white; display:none; justify-content:space-around; padding:10px 0; border-radius:20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); z-index: 1000; }
         .nav-item { display:flex; flex-direction:column; align-items:center; background:none; border:none; color:#555; font-size:12px; font-weight:600; cursor:pointer; flex:1; }
         .nav-item i { font-size:20px; margin-bottom:4px; color:#f39c12; }
@@ -73,13 +47,11 @@
     <div id="logoutBtn" style="display:none;"><button onclick="logout()">Logout</button></div>
 </div>
 
-<div class="notice-wrapper"><div class="notice-text">🔥 New Tasks Available! Earn 51₹ Reward for every YouTube and Instagram Task! 🔥</div></div>
+<div class="notice-wrapper"><div class="notice-text">🔥 New Tasks Available! Earn 51₹ Reward for every Task! 🔥</div></div>
 
 <div class="page-section" id="homePage">
     <div class="top-section">
         <a href="https://t.me/rrp_major" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram</a>
-        <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp</a>
-        <a href="#" class="box"><img src="https://cdn-icons-png.flaticon.com/512/561/561127.png">Chat Us</a>
         <a href="https://youtube.com/@animationn-story" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube</a>
     </div>
     <div class="profile" id="profileSection">
@@ -94,32 +66,13 @@
     <div class="task-grid">
         <div class="task-card">
             <div class="reward-tag">+51 INR</div>
-            <div class="task-icon" style="background:#e14e4e;"><i class="fa-brands fa-youtube"></i></div>
             <h4>Watch Shorts</h4>
-            <p>Watch full shorts to earn</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:75%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Resume</button>
+            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Start</button>
         </div>
-
         <div class="task-card">
             <div class="reward-tag">+51 INR</div>
-            <div class="task-icon" style="background:#4e7ae1;"><i class="fa-solid fa-star"></i></div>
             <h4>Subscribe</h4>
-            <p>Subscribe and earn coins</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:40%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/YOUR_CHANNEL', 2)">▶ Resume</button>
-        </div>
-
-        <div class="task-card" style="grid-column: span 2;">
-            <div class="reward-tag">+51 INR</div>
-            <div class="task-icon" style="background:#d62976;"><i class="fa-brands fa-instagram"></i></div>
-            <h4>Follow Instagram</h4>
-            <p>Follow our official page</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:50%;"></div></div>
-            <div class="task-info"><span>🔄 Daily 1x</span><span>💰 51₹</span></div>
-            <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Resume</button>
+            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/@animationn-story', 2)">▶ Start</button>
         </div>
     </div>
 </div>
@@ -141,7 +94,6 @@
     <input type="email" id="lEmail" placeholder="Email"><br>
     <input type="password" id="lPass" placeholder="Password"><br>
     <button onclick="loginUser()">Login</button>
-    <p style="color:#ff9800; cursor:pointer; font-weight:bold; margin-top:15px;" onclick="showPage('forgotPage')">Forgot Password?</p>
 </div>
 
 <div class="page-section auth-page" id="registerPage">
@@ -153,17 +105,9 @@
     <button onclick="registerUser()">Create Account</button>
 </div>
 
-<div class="page-section auth-page" id="forgotPage">
-    <h2>Reset Password</h2>
-    <input type="email" id="fEmail" placeholder="Enter Registered Email"><br>
-    <button onclick="resetPassword()">Send Link</button>
-</div>
-
 <div class="bottom-nav" id="bottomNav">
     <button class="nav-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i><span>Home</span></button>
     <button class="nav-item" onclick="showPage('taskPage')"><i class="fa-solid fa-list-check"></i><span>Task</span></button>
-    <button class="nav-item"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></button>
-    <button class="nav-item"><i class="fa-solid fa-user"></i><span>Me</span></button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -185,55 +129,40 @@ const db = firebase.firestore();
 
 let currentTaskTimer;
 let activeVideoId = "";
-let currentActiveTaskId = 1; // Naya variable task track karne ke liye
+let currentActiveTaskId = 1;
 
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
     document.getElementById(id).style.display = 'block';
 }
 
-function loginUser() {
-    auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message));
-}
+function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value).catch(e => alert(e.message)); }
 
 function registerUser() {
     if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
     auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
-        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 130, email: rEmail.value, createdAt: new Date()});
+        // Document create karte waqt default wallet value 0 set kar rahe hain
+        db.collection("users").doc(res.user.uid).set({name: rName.value, wallet: 0, email: rEmail.value, createdAt: new Date()});
     }).catch(e => alert(e.message));
-}
-
-function resetPassword() {
-    auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Sent!")).catch(e => alert(e.message));
 }
 
 function logout() { auth.signOut().then(() => location.reload()); }
 
 function unmuteVideo() {
-    const modalFrame = document.getElementById('modalFrame');
     document.getElementById('unmuteBtn').style.display = "none";
-    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
 }
 
 function openVideoPopup(videoInput, taskId, videoSeconds) {
-    const videoModal = document.getElementById('videoModal');
-    const modalFrame = document.getElementById('modalFrame');
-    const timerText = document.getElementById('timerText');
-    const claimBtn = document.getElementById('claimBtn');
-    const unmuteBtn = document.getElementById('unmuteBtn');
-
-    let videoId = videoInput.split('?')[0].split('/').pop();
-    activeVideoId = videoId;
-    currentActiveTaskId = taskId; // ID save kar rahe hain
-
-    videoModal.style.display = "flex";
-    unmuteBtn.style.display = "block";
-    claimBtn.style.display = "none";
-    
-    modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
+    activeVideoId = videoInput.split('?')[0].split('/').pop();
+    currentActiveTaskId = taskId;
+    document.getElementById('videoModal').style.display = "flex";
+    document.getElementById('unmuteBtn').style.display = "block";
+    document.getElementById('claimBtn').style.display = "none";
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
     
     let timeLeft = videoSeconds;
-    timerText.style.display = "block";
+    const timerText = document.getElementById('timerText');
     timerText.innerText = `Watch for ${timeLeft} seconds...`;
     
     if(currentTaskTimer) clearInterval(currentTaskTimer);
@@ -243,10 +172,10 @@ function openVideoPopup(videoInput, taskId, videoSeconds) {
             timerText.innerText = `Watch for ${timeLeft} more seconds...`;
         } else {
             clearInterval(currentTaskTimer);
-            timerText.innerText = "Task Complete! Now claim reward.";
+            timerText.innerText = "Task Complete!";
+            const claimBtn = document.getElementById('claimBtn');
             claimBtn.style.display = "block";
-            unmuteBtn.style.display = "none";
-            // Button par click function set karein
+            // Claim button ko sahi task ID pass kar rahe hain
             claimBtn.onclick = function() { completeTask(currentActiveTaskId, 51); };
         }
     }, 1000);
@@ -263,25 +192,20 @@ function completeTask(id, amt) {
     if(!user) return;
     const ref = db.collection("users").doc(user.uid);
     
-    // Wallet update using FieldValue.increment
-    ref.update({ 
+    // {merge: true} lagane se "Database Error" nahi aayega agar document pehle se na ho
+    ref.set({ 
         wallet: firebase.firestore.FieldValue.increment(amt) 
-    }).then(() => {
-        alert(`Added ${amt}₹ to wallet!`);
-        const targetBtn = document.getElementById("btnTask" + id);
-        if(targetBtn) {
-            targetBtn.innerText = "✅ Completed";
-            targetBtn.disabled = true;
-        }
+    }, { merge: true }).then(() => {
+        alert(`₹${amt} Claimed Successfully!`);
+        const btn = document.getElementById("btnTask" + id);
+        if(btn) { btn.innerText = "✅ Completed"; btn.disabled = true; }
         closePopup();
-    }).catch(err => {
-        alert("Database error: Check your Firebase Rules.");
-    });
+    }).catch(e => alert("Database Error: Please check Firebase Rules and Publish them."));
 }
 
 function openExternalTask(url, id) {
     window.open(url, '_blank');
-    setTimeout(() => { if(confirm("Task Done?")) completeTask(id, 51); }, 4000);
+    setTimeout(() => { if(confirm("Task Done?")) completeTask(id, 51); }, 5000);
 }
 
 auth.onAuthStateChanged(user => {
