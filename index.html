@@ -47,12 +47,11 @@
     <div id="logoutBtn" style="display:none;"><button onclick="logout()">Logout</button></div>
 </div>
 
-<div class="notice-wrapper"><div class="notice-text">🔥 Refer friends and earn ₹20 per referral! Watch videos and earn daily! 🔥</div></div>
+<div class="notice-wrapper"><div class="notice-text">🎁 Join via Referral and get ₹91 Signup Bonus instantly! 🎁</div></div>
 
 <div class="page-section" id="homePage">
     <div class="top-section">
         <a href="https://t.me/rrp_major" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">Telegram</a>
-        <a href="https://whatsapp.com/channel/0029VbBaUEMKwqSQghpNNm04" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">WhatsApp</a>
         <a href="https://youtube.com/@animationn-story" class="box" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">YouTube</a>
     </div>
     <div class="profile" id="profileSection">
@@ -75,11 +74,6 @@
             <h4>Subscribe</h4>
             <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/@animationn-story', 2)">▶ Start</button>
         </div>
-        <div class="task-card" style="grid-column: span 2;">
-            <div class="reward-tag">+51 INR</div>
-            <h4>Follow Instagram</h4>
-            <button class="action-btn" id="btnTask3" onclick="openExternalTask('https://instagram.com/YOUR_ID', 3)">▶ Start</button>
-        </div>
     </div>
 </div>
 
@@ -90,7 +84,7 @@
         <h1 id="teamCount">0</h1>
     </div>
     <div class="wallet-box">
-        <p>Your Referral Link (Earn ₹20 per Refer)</p>
+        <p>Share Your Link (Earn ₹20 per Refer)</p>
         <p id="refLink" style="font-size:11px; color:#ff9800; word-break: break-all; margin:10px 0;"></p>
         <button onclick="copyRef()" style="padding:10px; background:#ff9800; border:none; border-radius:5px; color:white; font-weight:bold;">COPY LINK</button>
     </div>
@@ -101,34 +95,28 @@
     <input type="email" id="lEmail" placeholder="Email"><br>
     <input type="password" id="lPass" placeholder="Password"><br>
     <button onclick="loginUser()">Login</button>
-    <p onclick="showPage('forgotPage')" style="cursor:pointer; color:#ff9800; margin-top:10px;">Forgot Password?</p>
+    <p onclick="showPage('registerPage')" style="cursor:pointer; margin-top:10px;">New user? Register Here</p>
 </div>
 
 <div class="page-section auth-page" id="registerPage">
     <h2>Register</h2>
+    <div id="refBadge" style="display:none; background:#4caf50; padding:5px; border-radius:5px; font-size:12px; margin-bottom:10px;">✅ Referral Applied: Bonus ₹91 Active</div>
     <input type="text" id="rName" placeholder="Full Name"><br>
     <input type="email" id="rEmail" placeholder="Email"><br>
     <input type="password" id="rPass" placeholder="Password"><br>
     <input type="password" id="rCPass" placeholder="Confirm Password"><br>
-    <button onclick="registerUser()">Create Account</button>
-</div>
-
-<div class="page-section auth-page" id="forgotPage">
-    <h2>Reset Password</h2>
-    <input type="email" id="fEmail" placeholder="Enter Email"><br>
-    <button onclick="resetPassword()">Send Reset Link</button>
-    <p onclick="showPage('loginPage')" style="cursor:pointer; margin-top:10px;">Back to Login</p>
+    <button onclick="registerUser()">Create Account & Claim ₹91</button>
 </div>
 
 <div class="video-modal" id="videoModal">
     <div class="modal-content">
         <span class="close-modal" onclick="closePopup()">&times;</span>
-        <button id="unmuteBtn" onclick="unmuteVideo()"><i class="fa-solid fa-volume-high"></i> Unmute</button>
+        <button id="unmuteBtn" onclick="unmuteVideo()">Unmute</button>
         <div id="modalFrame"></div>
     </div>
     <div class="modal-footer">
-        <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
-        <button id="claimBtn" style="display:none; padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; font-weight:bold;">CLAIM 51₹ NOW</button>
+        <p id="timerText"></p>
+        <button id="claimBtn" style="display:none; padding:10px 20px; background:green; color:white; border:none;">CLAIM</button>
     </div>
 </div>
 
@@ -156,9 +144,16 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Referral Detection
+// 1. Referral Logic: Check URL on Load
 const urlParams = new URLSearchParams(window.location.search);
 const referredBy = urlParams.get('ref');
+
+window.onload = function() {
+    if(referredBy && !auth.currentUser) {
+        showPage('registerPage');
+        document.getElementById('refBadge').style.display = "block";
+    }
+}
 
 function showPage(id) {
     document.querySelectorAll('.page-section').forEach(p => p.style.display = 'none');
@@ -169,95 +164,80 @@ function loginUser() { auth.signInWithEmailAndPassword(lEmail.value, lPass.value
 
 function registerUser() {
     if(rPass.value !== rCPass.value) { alert("Mismatch"); return; }
+    
+    // Naye user ko bonus check karna
+    let initialBalance = referredBy ? 91 : 0;
+
     auth.createUserWithEmailAndPassword(rEmail.value, rPass.value).then(res => {
         const uid = res.user.uid;
         db.collection("users").doc(uid).set({
             name: rName.value,
-            wallet: 0,
+            wallet: initialBalance,
             email: rEmail.value,
             referredBy: referredBy || null,
             teamCount: 0,
             createdAt: new Date()
         }).then(() => {
             if(referredBy) {
+                // Refer karne wale ko reward
                 db.collection("users").doc(referredBy).update({
                     wallet: firebase.firestore.FieldValue.increment(20),
                     teamCount: firebase.firestore.FieldValue.increment(1)
                 });
+                alert("Account Created! You received ₹91 Referral Bonus.");
+            } else {
+                alert("Account Created successfully!");
             }
         });
     }).catch(e => alert(e.message));
 }
 
-function resetPassword() {
-    auth.sendPasswordResetEmail(fEmail.value).then(() => alert("Reset link sent!")).catch(e => alert(e.message));
-}
-
 function logout() { auth.signOut().then(() => location.reload()); }
 
-// --- VIDEO & TASK LOGIC (OLD FUNCTIONS PRESERVED) ---
+// --- Tasks Logic (Same as old) ---
 let currentTaskTimer;
 let activeVideoId = "";
-let currentActiveTaskId = 1;
-
-function unmuteVideo() {
-    document.getElementById('unmuteBtn').style.display = "none";
-    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-}
-
 function openVideoPopup(vId, tId, sec) {
     activeVideoId = vId;
-    currentActiveTaskId = tId;
     document.getElementById('videoModal').style.display = "flex";
-    document.getElementById('unmuteBtn').style.display = "block";
-    document.getElementById('claimBtn').style.display = "none";
-    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-    
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&controls=0"></iframe>`;
     let left = sec;
-    document.getElementById('timerText').innerText = `Watch for ${left} seconds...`;
-    
-    if(currentTaskTimer) clearInterval(currentTaskTimer);
     currentTaskTimer = setInterval(() => {
         left--;
-        if(left > 0) {
-            document.getElementById('timerText').innerText = `Watch for ${left} more seconds...`;
-        } else {
+        document.getElementById('timerText').innerText = left + "s left";
+        if(left <= 0) {
             clearInterval(currentTaskTimer);
-            document.getElementById('timerText').innerText = "Task Complete!";
-            const cb = document.getElementById('claimBtn');
-            cb.style.display = "block";
-            cb.onclick = () => completeTask(tId, 51);
+            document.getElementById('claimBtn').style.display = "block";
+            document.getElementById('claimBtn').onclick = () => completeTask(tId, 51);
         }
     }, 1000);
 }
 
 function completeTask(id, amt) {
-    db.collection("users").doc(auth.currentUser.uid).set({
+    db.collection("users").doc(auth.currentUser.uid).update({
         wallet: firebase.firestore.FieldValue.increment(amt)
-    }, { merge: true }).then(() => {
-        alert(`₹${amt} Added to Wallet!`);
-        const btn = document.getElementById("btnTask" + id);
-        if(btn) { btn.innerText = "✅ Done"; btn.disabled = true; }
+    }).then(() => {
+        alert("Earned ₹" + amt);
         closePopup();
-    }).catch(e => alert("Database Error: Check Rules."));
+    });
 }
-
-function closePopup() { document.getElementById('videoModal').style.display = "none"; clearInterval(currentTaskTimer); }
-function openExternalTask(url, id) { window.open(url, '_blank'); setTimeout(() => { if(confirm("Task Finished?")) completeTask(id, 51); }, 5000); }
+function closePopup() { document.getElementById('videoModal').style.display="none"; clearInterval(currentTaskTimer); }
+function unmuteVideo() { document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0"></iframe>`; }
+function openExternalTask(url, id) { window.open(url, '_blank'); setTimeout(() => { if(confirm("Done?")) completeTask(id, 51); }, 5000); }
 
 function copyRef() {
     navigator.clipboard.writeText(document.getElementById('refLink').innerText);
-    alert("Referral Link Copied!");
+    alert("Copied!");
 }
 
 auth.onAuthStateChanged(user => {
     if(user){
         showPage('homePage');
-        document.getElementById('profileSection').style.display = "block";
-        document.getElementById('bottomNav').style.display = "flex";
         document.getElementById('authButtons').style.display = "none";
         document.getElementById('logoutBtn').style.display = "block";
-        document.getElementById('refLink').innerText = window.location.origin + "?ref=" + user.uid;
+        document.getElementById('bottomNav').style.display = "flex";
+        document.getElementById('profileSection').style.display = "block";
+        document.getElementById('refLink').innerText = window.location.origin + window.location.pathname + "?ref=" + user.uid;
         
         db.collection("users").doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
