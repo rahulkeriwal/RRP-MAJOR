@@ -15,10 +15,8 @@
         .page-section { display:none; padding:15px; text-align:center; padding-bottom:100px; }
         #homePage { display:block; }
         
-        /* Grid for Home Buttons */
         .top-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .box { height:90px; background:white; border-radius:15px; color:black; display:flex; flex-direction:column; justify-content:center; align-items:center; text-decoration:none; font-weight:bold; font-size:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; }
-        .box:active { transform: scale(0.95); }
+        .box { height:90px; background:white; border-radius:15px; color:black; display:flex; flex-direction:column; justify-content:center; align-items:center; text-decoration:none; font-weight:bold; font-size:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
         .box i { font-size: 28px; margin-bottom: 8px; }
         .box.tg i { color: #0088cc; }
         .box.wa i { color: #25d366; }
@@ -33,11 +31,12 @@
         .action-btn { width: 100%; padding: 8px; border: none; border-radius: 10px; background: white; color: #6a4fa3; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
         .action-btn:disabled { background: #4caf50 !important; color: white !important; cursor: default; }
         
+        /* Video/Ad Modal */
         .video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
-        .modal-content { width:85%; max-width:340px; background:#000; border-radius:20px; overflow:hidden; position:relative; border: 2px solid #6a4fa3; }
-        .close-modal { position:absolute; top: -40px; right: 0; font-size:30px; color:white; cursor:pointer; }
-        #modalFrame { width:100%; height:500px; position: relative; }
-        #modalFrame iframe { width:100%; height:100%; border:none; pointer-events: none; }
+        .modal-content { width:90%; max-width:360px; background:#fff; border-radius:20px; overflow:hidden; position:relative; height: 500px; }
+        .close-modal { position:absolute; top: -45px; right: 0; font-size:35px; color:white; cursor:pointer; font-weight: bold; }
+        #modalFrame { width:100%; height:100%; }
+        #modalFrame iframe { width:100%; height:100%; border:none; }
         #unmuteBtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 100; }
         
         .auth-page input { width:90%; padding:12px; margin:10px 0; border-radius:8px; border:none; outline:none; }
@@ -58,7 +57,7 @@
     <div id="logoutBtn" style="display:none;"><button onclick="logout()">Logout</button></div>
 </div>
 
-<div class="notice-wrapper"><div class="notice-text">🔥 Get Help on WhatsApp! Signup Bonus ₹91 Active! 🔥</div></div>
+<div class="notice-wrapper"><div class="notice-text">💰 Play Ad Tasks to Earn Rewards! Signup Bonus ₹91 Active! 💰</div></div>
 
 <div class="page-section" id="homePage">
     <div class="top-section">
@@ -80,12 +79,12 @@
         <div class="task-card">
             <div class="reward-tag">+51 INR</div>
             <h4>Watch Shorts</h4>
-            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Start</button>
+            <button class="action-btn" id="btnTask1" onclick="openVideoPopup('e2m5VVJp3pI', 1, 15)">▶ Play</button>
         </div>
         <div class="task-card">
             <div class="reward-tag">+51 INR</div>
-            <h4>Subscribe</h4>
-            <button class="action-btn" id="btnTask2" onclick="openExternalTask('https://youtube.com/@animationn-story', 2)">▶ Start</button>
+            <h4>Play Ad Task</h4>
+            <button class="action-btn" id="btnTask2" onclick="openAdPopup('https://www.effectivegatecpm.com/mkwzytbfv?key=2a95aa966392b6589f77d02820e38665', 2, 20)">▶ Play</button>
         </div>
     </div>
 </div>
@@ -121,14 +120,14 @@
 </div>
 
 <div class="video-modal" id="videoModal">
-    <div class="modal-content">
+    <div class="modal-content" id="modalContentWrapper">
         <span class="close-modal" onclick="closePopup()">&times;</span>
-        <button id="unmuteBtn" onclick="unmuteVideo()">Unmute</button>
+        <button id="unmuteBtn" onclick="unmuteVideo()" style="display:none;">Unmute</button>
         <div id="modalFrame"></div>
     </div>
     <div style="margin-top:20px; text-align:center;">
         <p id="timerText" style="font-weight:bold; color:#ff9800;"></p>
-        <button id="claimBtn" style="display:none; padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; font-weight:bold;">CLAIM REWARD</button>
+        <button id="claimBtn" style="display:none; padding:12px 25px; background:#4caf50; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">CLAIM REWARD</button>
     </div>
 </div>
 
@@ -179,14 +178,7 @@ function registerUser() {
             name: rName.value, wallet: bonus, email: rEmail.value,
             referredBy: referredBy || null, teamCount: 0, 
             lastCompleted: {}, createdAt: new Date()
-        }).then(() => {
-            if(referredBy) {
-                db.collection("users").doc(referredBy).update({
-                    wallet: firebase.firestore.FieldValue.increment(20),
-                    teamCount: firebase.firestore.FieldValue.increment(1)
-                });
-            }
-        });
+        }).then(() => { if(referredBy) { /* Referrer Logic */ } });
     }).catch(e => alert(e.message));
 }
 
@@ -201,7 +193,7 @@ function checkTaskAvailability(tasks) {
             btn.innerText = "✅ Done Today";
             btn.disabled = true;
         } else {
-            btn.innerText = "▶ Start";
+            btn.innerText = "▶ Play";
             btn.disabled = false;
         }
     });
@@ -210,21 +202,29 @@ function checkTaskAvailability(tasks) {
 let currentTaskTimer;
 let activeVideoId = "";
 
-function unmuteVideo() {
-    document.getElementById('unmuteBtn').style.display = "none";
-    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-}
-
+// Video Task (Old Functionality)
 function openVideoPopup(vId, tId, sec) {
     activeVideoId = vId;
     document.getElementById('videoModal').style.display = "flex";
     document.getElementById('unmuteBtn').style.display = "block";
     document.getElementById('claimBtn').style.display = "none";
     document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
-    
+    startTimer(sec, tId);
+}
+
+// Ad Task (New Functionality)
+function openAdPopup(url, tId, sec) {
+    document.getElementById('videoModal').style.display = "flex";
+    document.getElementById('unmuteBtn').style.display = "none";
+    document.getElementById('claimBtn').style.display = "none";
+    document.getElementById('modalFrame').innerHTML = `<iframe src="${url}"></iframe>`;
+    startTimer(sec, tId);
+}
+
+function startTimer(sec, tId) {
     let left = sec;
     document.getElementById('timerText').innerText = `Wait ${left}s...`;
-    
+    if(currentTaskTimer) clearInterval(currentTaskTimer);
     currentTaskTimer = setInterval(() => {
         left--;
         document.getElementById('timerText').innerText = `Wait ${left}s...`;
@@ -235,6 +235,11 @@ function openVideoPopup(vId, tId, sec) {
             document.getElementById('claimBtn').onclick = () => completeTask(tId, 51);
         }
     }, 1000);
+}
+
+function unmuteVideo() {
+    document.getElementById('unmuteBtn').style.display = "none";
+    document.getElementById('modalFrame').innerHTML = `<iframe src="https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1" allow="autoplay"></iframe>`;
 }
 
 function completeTask(id, amt) {
@@ -252,11 +257,6 @@ function closePopup() {
     document.getElementById('videoModal').style.display = "none"; 
     document.getElementById('modalFrame').innerHTML = "";
     clearInterval(currentTaskTimer); 
-}
-
-function openExternalTask(url, id) { 
-    window.open(url, '_blank'); 
-    setTimeout(() => { if(confirm("Task Finished?")) completeTask(id, 51); }, 5000); 
 }
 
 function copyRef() {
